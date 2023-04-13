@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+    <title>pel_mel</title>
+</head>
+<body class="d-flex flex-column justify-content-center" style="height: 100vh;">
+    <nav class="navbar navbar-light bg-light">
+        <form class="container-fluid justify-content-start">
+          
+            <div class="dropdown  me-2">         
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                   Fichier
+                  </button>            
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="#">Créer un corpus (discours & messages)</a></li>
+                    <li><a class="dropdown-item" href="#">Nettoyer un corpus </a></li>
+                    <li><a class="dropdown-item" href="#">Segmenter en phrases</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Ouvrir un corpus</a></li>
+                </ul>
+             </div>
+        
+          <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#aideModal">Aide ?</button>
+        </form>
+      </nav>
+      <!-- Aide Modal -->
+<div class="modal fade" id="aideModal" tabindex="-1" aria-labelledby="aideModalLabel" aria-hidden="true" >
+    <div class="modal-dialog d-flex justify-content-center" style="width: 60vw;">
+      <div class="modal-content " style="width: 60vw;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="aideModalLabel">Aide</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="width: 60vw;">
+        <!-- Modal -->
+        <ul>
+            <li>Pour commencer : 
+                <ol style="list-style: upper-roman;">
+                    <li>Au nineau du menu « Fichier » :
+                        <ul>
+                            <li>Créer votre corpus : <ul>
+                                <li>Dans le menu « Fichier », cliquer sur « créer un corpus »;</li>
+                                <li>Sélectionner le répertoire parent qui contient les sous-répertoires / fichiers (.txt, .doc, .pdf, .xml (pour les e-mail)...);</li>
+                                <li>Suivre les indications jusqu'à la fin du processus (création de corpus, nettoyage de corpus, segmentation par phrases);</li>
+                                <li>Le logiciel crée automatiquement un répertoire « workspace » (s'il n'ai pas déjà créé) dans la racine du projet (là où vous avez installé le logiciel).</li>
+                                <li>Dans le workspace, vous trouverez tous les fichiers créés (le corpus initial, le corpus nettoyé, le corpus segmenté en phrases...), ainsi que d'autres répertoires vides (Entités nommées, Termes, Relations...) pour sauvegarder les différents fichiers de sortie par la suite.</li>
+                                <li>Nettoyer un corpus existant.</li>
+                                <li>Visualiser un corpus existant.</li>
+                               
+                            </ul></li>
+  
+                        </ul>
+                    </li>
+                    <li>
+                        Au niveau de cette fenêtre pricipale, il y a 5 boutons principaux :
+                            <ol>
+                                <li>Entités nommées</li>
+                                <li>Termes</li>
+                                <li>Extraction de relations symantiques entre termes par la méthode des patrons</li>
+                                <li>Extraction de relations entre termes par la méthode symbolique (Word2Vec)</li>
+                                <li> Classification des messages par thématiques</li>
+                            </ol>
+                    </li>
+                </ol>
+            </li>
+            
+        </ul>
+
+     <p> Pour les détails d'utilisation de ces 5 boutons, vous allez trouver des guides d'utilisations dans chaque nouvelle fenêtre ouverte.</p>       
+   
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="flex-grow-1 text-center d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row">
+              <div class="col"><a class="btn btn-primary" href="#" role="button">Entités Nommées</a></div>
+              <div class="col"><a class="btn btn-primary" href="#" role="button">Termes</a></div>
+            </div>
+            <hr>
+            <p class="h3">Extraction de relation sémentiques entre termes</p>
+            <div class="container">
+                <div class="row">
+                  <div class="col"><a class="btn btn-primary" href="#" role="button">Méthode des patrons</a></div>
+                  <div class="col"><a class="btn btn-primary" href="#" role="button">Méthode symbolique <br> (Word2Vec)</a></div>
+                </div>
+                <hr>
+                <div class=""><a class="btn btn-primary" href="#" role="button">Classification de messages <br> (Doc2Vec)</a></div>
+      </div>
+     </div>
+     </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+</html>
