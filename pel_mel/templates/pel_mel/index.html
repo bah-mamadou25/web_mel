@@ -16,7 +16,7 @@
                    Fichier
                   </button>            
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Créer un corpus (discours & messages)</a></li>
+                    <li><a class="dropdown-item " data-bs-toggle="modal" data-bs-target="#fichierModal"href="#" >Créer un corpus (discours & messages)</a></li>
                     <li><a class="dropdown-item" href="#">Nettoyer un corpus </a></li>
                     <li><a class="dropdown-item" href="#">Segmenter en phrases</a></li>
                     <li><hr class="dropdown-divider"></li>
@@ -27,6 +27,26 @@
           <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#aideModal">Aide ?</button>
         </form>
       </nav>
+      <!-- choisir fichier Modal -->
+      <div class="modal fade" id="fichierModal" tabindex="-1" aria-labelledby="fichierModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="fichierModalLabel">choisr un fichier zippé</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+           <form action="" method="post" enctype="multipart/form-data">
+                 {% csrf_token %}
+                <input type="file" class="form-control-file" id="zipFile" name="zipFile">  
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-primary" value="Créer" >
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
       <!-- Aide Modal -->
 <div class="modal fade" id="aideModal" tabindex="-1" aria-labelledby="aideModalLabel" aria-hidden="true" >
     <div class="modal-dialog d-flex justify-content-center" style="width: 60vw;">
@@ -36,7 +56,6 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" style="width: 60vw;">
-        <!-- Modal -->
         <ul>
             <li>Pour commencer : 
                 <ol style="list-style: upper-roman;">
