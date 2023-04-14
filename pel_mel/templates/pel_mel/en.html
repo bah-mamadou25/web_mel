@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+    <title>pel_mel</title>
+</head>
+
+<body style="height: 100vh;">
+    <nav class="navbar navbar-light bg-light">
+        <form class="container-fluid justify-content-start" style="width: 100vw;">
+            <button class="btn btn-outline-success me-2" type="button">Fusion</button>
+            <button class="btn btn-sm btn-outline-secondary" type="button">Aide</button>
+        </form>
+    </nav>
+    <form action="" method="post" enctype="multipart/form-data" style="margin-top: 5px;">
+        <fieldset style="text-align: center;">
+            {% csrf_token %}
+            <input type="file" class="form-control-file" id="corpus" name="corpus" accept=".txt">
+            <input type="submit" class="btn btn-primary" value="Lancer la recherche des ENs">
+        </fieldset>
+    </form>
+    <table style="width: 100vw; margin: 5vw;">
+        <tr>
+            <th style="text-align: center;">Entités Nommées (Personnes)</th>
+            <th style="text-align: center;">Entités Nommées (Organisations)</th>
+        </tr>
+        <tr>
+            <td style="text-align: center;">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-secondary">Ouvrir</button>
+                    <button type="button" class="btn btn-secondary">Valider</button>
+                </div>
+            </td>
+            <td style="text-align: center;">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-secondary">Ouvrir</button>
+                    <button type="button" class="btn btn-secondary">Valider</button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table class="table" style="margin-right: 4vw;">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px;">Num</th>
+                            <th>Personnes</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td colspan="2">
+                            <table id="personnes" class="table" style="overflow-y: scroll;"></table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table class="table" style="margin-left: 4vw;">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px;">Num</th>
+                            <th>Organisations</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td colspan="2">
+                            <table id="organisations" class="table"></table>
+                        </td>
+                        
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
