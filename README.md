@@ -9,9 +9,9 @@ Ce projet est une application web développée avec Django. Elle consiste à tra
 
 ## Installation
 1. Clonez ce dépôt sur votre machine locale :
-```
-    git clone https://github.com/username/nom-du-projet.git
-``` 
+    ```
+        git clone https://github.com/username/nom-du-projet.git
+    ``` 
     
 
 2. Déplacez-vous dans le répertoire du projet :
@@ -25,9 +25,9 @@ Ce projet est une application web développée avec Django. Elle consiste à tra
     ```
 
 4. Exécutez les migrations de la base de données :
-```
-    python manage.py migrate
-```
+    ```
+        python manage.py migrate
+    ```
 5. Lancez le serveur de développement :
     ```
         python manage.py runserver
