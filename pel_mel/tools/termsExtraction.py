@@ -8,6 +8,7 @@ import spacy
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem.snowball import SnowballStemmer
+from .tool_ENs import create_dir
 
 
 stemmer = SnowballStemmer(language='french')
@@ -41,13 +42,7 @@ def get_number_of_sentences(corpus_path):
     sentences = fr.readlines()
     return len(sentences)
 
-def split_list_of_phrases(corpus_path):
-    """
-    Permet de diviser une longue liste de phrases sur plusieurs listes
-    :param corpus_path : chemin vers le corpus
-    """
-    pathTo, FileName = os.path.split(corpus_path)
-    os.system('cd ' + pathTo + ' && split ' + corpus_path + ' -l 12000')
+
 
 
 def merge_files(terms_files_list):

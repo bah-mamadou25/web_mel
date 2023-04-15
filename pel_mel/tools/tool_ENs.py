@@ -36,6 +36,7 @@ def get_number_of_sentences(corpus_path):
     :param corpus_path : chemin vers le corpus
     :return : nombre de phrases
     """
+    
     fr = open(corpus_path, 'r', encoding='UTF-8')
     sentences = fr.readlines()
     return len(sentences)
@@ -45,12 +46,23 @@ def split_list_of_phrases(corpus_path):
     Permet de diviser une longue liste de phrases sur plusieurs listes
     :param corpus_path : chemin vers le corpus
     """
-    pathTo, FileName = os.path.split(corpus_path)
-    os.system('cd ' + pathTo + ' && split ' + corpus_path + ' -l 12000')
+    #pathTo, FileName = os.path.split(corpus_path)
+    create_dir('data/bulky')
+
+    os.system('split -l 12000 ' + corpus_path + ' data/bulky/')
+    for file_name in os.listdir('data/bulky'):
+        print(file_name)
+        # Exécution de la fonction sur chaque nom de fichier
+        get_named_entities('data/bulky/'+file_name, 'workspace/ENs/'+file_name+'_pers.csv', 'workspace/ENs/'+file_name+'_org.csv')
+
+   
 
 
 def get_named_entities(input_text_path, output_per_path, output_org_path):
+    
     number_of_sentences = get_number_of_sentences(input_text_path)
+    
+    
     if number_of_sentences < 12050:
         ens_list = getENs(input_text_path)
         if len(ens_list[0]) > 1 and len(ens_list[1]) > 1:
@@ -63,6 +75,7 @@ def get_named_entities(input_text_path, output_per_path, output_org_path):
         # le fichier est très volumineux, il faut le découper en plusieurs fichiers et renvoyer
         # un message d'erreur à l'interface
         split_list_of_phrases(input_text_path)
+
         return 'too_bulky'
 
 

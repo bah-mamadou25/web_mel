@@ -35,6 +35,7 @@ def accueil(request):
 
 def en(request):
     if request.FILES.get('corpus'):
+            
             tool_ENs.create_dir('workspace/ENs')
             tool_ENs.create_dir('data')
             fichier = request.FILES['corpus']

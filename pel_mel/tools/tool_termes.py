@@ -1,5 +1,4 @@
 import os
-import re
 import subprocess
 
 import spacy
@@ -71,7 +70,7 @@ def terms_extraction(corpus_path, termsExtracted_path, STEM, METODE_SCORING, LON
     else:
         # le fichier est très volumineux, il faut le découper en plusieurs fichiers et renvoyer
         # un message d'erreur à l'interface
-        split_list_of_phrases(corpus_path)
+        split_list_of_phrases(corpus_path, STEM, METODE_SCORING, LONGUEURMIN, LONGUEURMAX)
         return 'too_bulky'
 
 def merge_files_list(terms_files_list):
@@ -91,3 +90,16 @@ def fileToList(file_path):
 
 def get_terms_sources(terms_file_path):
     return getTermsSources(terms_file_path)
+
+def split_list_of_phrases(corpus_path, STEM, METODE_SCORING, LONGUEURMIN, LONGUEURMAX):
+    """
+    Permet de diviser une longue liste de phrases sur plusieurs listes
+    :param corpus_path : chemin vers le corpus
+    """
+    create_dir('data/bulky')
+
+    os.system('split -l 12000 ' + corpus_path + ' data/bulky/')
+    for file_name in os.listdir('data/bulky'):
+        print(file_name)
+        # Exécution de la fonction sur chaque nom de fichier
+        terms_extraction('data/bulky/'+file_name, 'workspace/termes/'+file_name+'_termes.csv', STEM, METODE_SCORING, LONGUEURMIN, LONGUEURMAX)
