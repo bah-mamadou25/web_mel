@@ -1,7 +1,7 @@
 # views.py
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
-from .tools import tool_load_file,tool_ENs
+from .tools import tool_load_file,tool_ENs,tool_termes
 import time,os
 
 
@@ -35,15 +35,31 @@ def accueil(request):
 
 def en(request):
     if request.FILES.get('corpus'):
-
+            tool_ENs.create_dir('workspace/ENs')
+            tool_ENs.create_dir('data')
             fichier = request.FILES['corpus']
             fs = FileSystemStorage()
-            fs.save('data/'+fichier.name, fichier)
-            tool_ENs.get_named_entities('data/'+fichier.name,'workspace/pers.csv','workspace/org.csv')
+            fs.save('data/'+fichier.name, fichier)    
+            tool_ENs.get_named_entities('data/'+fichier.name,'workspace/ENs/pers.csv','workspace/ENs/org.csv')
 
     return render(request,'pel_mel/en.html',{})
 
 
 
-
+def termes(request):
+     if request.FILES.get('corpus'):      
+        tool_ENs.create_dir('data')
+        tool_ENs.create_dir('workspace/termes')
+        fichier = request.FILES['corpus']
+        stem="False"
+        fs = FileSystemStorage()
+        fs.save('data/'+fichier.name, fichier)  
+        if request.POST.get('reduire'):
+            stem="True"         
+               
+        methodeScoring = request.POST['methodeScoring']
+        minimum=request.POST['min']
+        maximum=request.POST['max']
+        tool_termes.terms_extraction('data/'+fichier.name,'workspace/termes/termes.csv',stem,methodeScoring,minimum,maximum)
+     return render(request,'pel_mel/termes.html',{})
 

@@ -1,4 +1,4 @@
-import os,re,subprocess
+import os,re,subprocess,shutil
 
 import spacy
 from .tool_load_file import read_text
@@ -141,3 +141,9 @@ def get_named_entities(input_text_path, output_per_path, output_org_path):
         # un message d'erreur à l'interface
         split_list_of_phrases(input_text_path)
         return 'too_bulky'
+    
+
+def create_dir(dir):
+    if os.path.exists(dir):
+        shutil.rmtree(dir)
+    os.mkdir(dir)
