@@ -33,7 +33,7 @@
             {% csrf_token %}
             <br>
             <br>
-            <input type="file" class="form-control-file" id="corpus" name="corpus" accept=".txt"><br><br>
+            <input type="file" class="form-control-file" id="corpus" name="corpus" accept=".txt" required><br><br>
             
             <div class="form-check form-switch form-check-inline"> 
                 <label class="form-check-label" for="flexSwitchCheckChecked">Reduire les termes à leur racine </label>
@@ -47,9 +47,9 @@
               </select>
               <br><br>
               <label for="min">Nombre min de mots dans un terme : </label>
-              <input type="number" name="min" id="min" min="1" style="width: 70px;"> <br><br>
+              <input type="number" name="min" id="min" min="1" style="width: 70px;" required> <br><br>
               <label for="min">Nombre max de mots dans un terme : </label>
-              <input type="number" name="max" id="max" min="1" style="width: 70px;">
+              <input type="number" name="max" id="max" min="1" style="width: 70px;" required>
               <br><br>
 
               <input type="submit" class="btn btn-primary" value="Lancer la recherche des termes">
@@ -81,9 +81,7 @@
             <th scope="col">Source</th>
           </tr>
         </thead>
-        <tbody>
-          
-        </tbody>
+        {{termes}}
       </table>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,11 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/en.css' %}">
     <title>pel_mel</title>
 </head>
 
-<body style="height: 100vh;">
-    <nav class="navbar navbar-light bg-light">
+<body style="height: 100vh;" >
+    <nav class="navbar navbar-light bg-light" >
         <form class="container-fluid justify-content-start" style="width: 100vw;">
             <button class="btn btn-outline-success me-2" type="button">Fusion</button>
             <button class="btn btn-sm btn-outline-secondary" type="button">Aide</button>
@@ -43,35 +45,26 @@
             </td>
         </tr>
         <tr>
-            <td>
-                <table class="table" style="margin-right: 4vw;">
+            <td style="vertical-align: top;">
+                <table class="table" style="margin-right: 4vw;" id="table_personnes">
                     <thead>
-                        <tr>
+                        
                             <th style="width: 10px;">Num</th>
                             <th>Personnes</th>
-                        </tr>
+                      
                     </thead>
-                    <tr>
-                        <td colspan="2">
-                            <table id="personnes" class="table" style="overflow-y: scroll;"></table>
-                        </td>
-                    </tr>
+                    {{table_personnes}}
                 </table>
             </td>
-            <td>
-                <table class="table" style="margin-left: 4vw;">
+            <td style="vertical-align: top;">
+                <table class="table" id="table_organisations" style="margin-left: 4vw;" >
                     <thead>
-                        <tr>
+                       
                             <th style="width: 10px;">Num</th>
                             <th>Organisations</th>
-                        </tr>
-                    </thead>
-                    <tr>
-                        <td colspan="2">
-                            <table id="organisations" class="table"></table>
-                        </td>
                         
-                    </tr>
+                    </thead>
+                    {{table_organisations}}
                 </table>
             </td>
         </tr>

@@ -1,4 +1,4 @@
-import os,re,subprocess,shutil
+import os,re,subprocess,shutil,csv
 
 import spacy
 from .tool_load_file import read_text
@@ -160,3 +160,30 @@ def create_dir(dir):
     if os.path.exists(dir):
         shutil.rmtree(dir)
     os.mkdir(dir)
+
+def csv_to_html_table(csv_path):
+    html_table = "<tbody>\n"
+    with open(csv_path, 'r') as csv_file:
+        reader = csv.reader(csv_file)
+        for i, row in enumerate(reader):
+            html_table += "<tr><td>{}</td>".format(i+1)
+            for data in row:
+                for element in data.split(';'):
+                    html_table += "<td>{}</td>".format(element)
+            html_table += "</tr>\n"
+    html_table += "</tbody>"
+    return html_table
+
+def fusion_files(dir_path, endwith, output_file):
+    # Créer une liste de tous les fichiers dans le répertoire
+    files = [os.path.join(dir_path, f) for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
+    
+    # Filtrer les fichiers qui se terminent par la chaîne de caractères
+    filtered_files = [f for f in files if f.endswith(endwith)]
+    print(filtered_files)
+    # Ouvrir le fichier de sortie en mode écriture
+    with open(output_file, 'w') as out_file:
+        # Fusionner tous les fichiers dans un seul
+        for f in filtered_files:
+            with open(f, 'r') as in_file:
+                out_file.write(in_file.read())
