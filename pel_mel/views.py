@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.utils.safestring import mark_safe
-from .tools import tool_load_file,tool_ENs,tool_termes
+from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns
 import time,os
 
 
@@ -79,3 +79,27 @@ def termes(request):
       
      return render(request,'pel_mel/termes.html',{'termes':mark_safe(termes)})
 
+
+
+def relations(request):
+     nb_relations=0
+     table_relations=''
+     patterns=sorted(tool_relationsPatterns.get_patterns('patterns.txt'))
+     if request.method == 'POST':
+        tool_ENs.create_dir('workspace/relations')
+        tool_ENs.create_dir('data')
+        corpus = request.FILES['corpus']
+        fs = FileSystemStorage()
+        fs.save('data/'+corpus.name, corpus)   
+        termes = request.FILES['termes']
+        fs = FileSystemStorage()
+        fs.save('data/'+termes.name, termes) 
+        
+        selected_patterns = request.POST.getlist('selected_patterns')
+        rel_selected=', '.join(tool_relationsPatterns.get_relations_from_patterns(selected_patterns))
+        print("before")
+        tool_relationsPatterns.getRelations(selected_patterns, 'data/'+corpus.name, 'data/'+termes.name, rel_selected, 'workspace/relations/relations.csv')
+        print("after")
+        table_relations=tool_ENs.csv_to_html_table('workspace/relations/relations.csv') 
+        nb_relations=tool_termes.get_number_of_sentences('workspace/relations/relations.csv')
+     return render(request,'pel_mel/relations.html',{'patterns':patterns,'nb_relations': nb_relations,'table_relations': mark_safe(table_relations)})
