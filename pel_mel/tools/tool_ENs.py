@@ -161,7 +161,17 @@ def create_dir(dir):
         shutil.rmtree(dir)
     os.mkdir(dir)
 
+
+
 def csv_to_html_table(csv_path):
+    """
+    Convertit un fichier CSV en une table HTML.
+
+    :param csv_path: Le chemin d'accès du fichier CSV à convertir.
+    :type csv_path: str
+    :return: Une chaîne de caractères représentant une table HTML avec les données du fichier CSV.
+    :rtype: str
+    """
     html_table = "<tbody>\n"
     with open(csv_path, 'r') as csv_file:
         reader = csv.reader(csv_file)
@@ -174,7 +184,21 @@ def csv_to_html_table(csv_path):
     html_table += "</tbody>"
     return html_table
 
+
+
+
 def fusion_files(dir_path, endwith, output_file):
+    """
+    Fusionne plusieurs fichiers en un seul.
+
+    :param dir_path: Le chemin d'accès du répertoire contenant les fichiers à fusionner.
+    :type dir_path: str
+    :param endwith: La chaîne de caractères qui doit être présente à la fin des noms des fichiers à fusionner.
+    :type endwith: str
+    :param output_file: Le nom et le chemin d'accès du fichier de sortie contenant la fusion des fichiers.
+    :type output_file: str
+    """
+
     # Créer une liste de tous les fichiers dans le répertoire
     files = [os.path.join(dir_path, f) for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
     

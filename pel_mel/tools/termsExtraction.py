@@ -13,7 +13,7 @@ from .tool_ENs import create_dir
 
 stemmer = SnowballStemmer(language='french')
 nlp = spacy.load('fr_core_news_md')
-
+nlp.max_length = 2000000 
 def get_lemma(sentence):
     doc = nlp(sentence)
     return [token.lemma_ for token in doc]

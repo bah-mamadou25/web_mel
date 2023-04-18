@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.utils.safestring import mark_safe
+from django.http import JsonResponse
 from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns
 import time,os
 
@@ -53,6 +54,8 @@ def en(request):
             table_personnes=tool_ENs.csv_to_html_table('workspace/ENs/pers.csv') 
             table_organisations=tool_ENs.csv_to_html_table('workspace/ENs/org.csv') 
     return render(request,'pel_mel/en.html',{'table_personnes': mark_safe(table_personnes), 'table_organisations': mark_safe(table_organisations),})
+    
+
 
 
 
@@ -103,3 +106,60 @@ def relations(request):
         table_relations=tool_ENs.csv_to_html_table('workspace/relations/relations.csv') 
         nb_relations=tool_termes.get_number_of_sentences('workspace/relations/relations.csv')
      return render(request,'pel_mel/relations.html',{'patterns':patterns,'nb_relations': nb_relations,'table_relations': mark_safe(table_relations)})
+
+
+
+
+
+############################### API RESPONSE 
+
+def enAPI(request):
+    table_personnes=''
+    table_organisations=''       
+    if request.FILES.get('corpus'):
+        tool_ENs.create_dir('workspace/ENs')
+        tool_ENs.create_dir('data')
+        fichier = request.FILES['corpus']
+        fs = FileSystemStorage()
+        fs.save('data/'+fichier.name, fichier)
+        tool_ENs.get_named_entities('data/'+fichier.name, 'workspace/ENs/pers.csv', 'workspace/ENs/org.csv')
+
+        if os.path.exists("data/bulky"):
+            tool_ENs.fusion_files("workspace/ENs","pers.csv","workspace/ENs/pers.csv")
+            tool_ENs.fusion_files("workspace/ENs","org.csv","workspace/ENs/org.csv")
+
+        table_personnes = tool_ENs.csv_to_html_table('workspace/ENs/pers.csv')
+        table_organisations = tool_ENs.csv_to_html_table('workspace/ENs/org.csv')
+
+    data = {
+            'table_personnes': table_personnes,
+            'table_organisations': table_organisations,
+        }   
+
+    return JsonResponse(data)
+
+def termesAPI(request):
+     termes=''
+     if request.FILES.get('corpus'):      
+        tool_ENs.create_dir('data')
+        tool_ENs.create_dir('workspace/termes')
+        fichier = request.FILES['corpus']
+        stem="False"
+        fs = FileSystemStorage()
+        fs.save('data/'+fichier.name, fichier)  
+        if request.POST.get('reduire'):
+            stem="True"         
+               
+        methodeScoring = request.POST['methodeScoring']
+        minimum=request.POST['min']
+        maximum=request.POST['max']
+        tool_termes.terms_extraction('data/'+fichier.name,'workspace/termes/termes.csv',stem,methodeScoring,minimum,maximum)
+        if os.path.exists("data/bulky"):
+            tool_ENs.fusion_files("workspace/termes","termes.csv","workspace/termes/termes.csv")            
+
+        termes=tool_ENs.csv_to_html_table('workspace/termes/termes.csv') 
+        data = {
+            'termes': termes
+        } 
+      
+     return JsonResponse(data)

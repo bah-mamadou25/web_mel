@@ -1,5 +1,0 @@
-#table_organisations tbody,
-#table_personnes tbody {
-    max-height: 500px;
-    overflow: auto;
-}
