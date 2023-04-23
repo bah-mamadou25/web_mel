@@ -39,10 +39,12 @@ def createCorpus(input_path, output_path):
     :param input_path: le chemin complet vers le répertoire père contenant les sous-répertoire/fichiers à traiter
     :param output_path: le chemin complet où vous voulez stocker le fichier de sortie
     """
+    
     files_processed = 0
     output_file = open(output_path, "w")
     for rootdir, dirs, files in os.walk(input_path):
         for file in files:
+            print(file)
             if file.endswith(('.pdf', '.doc', '.docx', '.DOC', '.DOCX', '.txt')):
                 filename = os.path.join(rootdir, file)
                 file_parsed = parser.from_file(filename)
@@ -60,7 +62,8 @@ def createCorpus(input_path, output_path):
                     output_file.write(str(text_by_file))
                     files_processed = files_processed + 1
     output_file.close()
-
+    print("Corpus créé: " + output_path.strip())
+    print("Nombre total de fichiers traités ", files_processed)
 
 def download_corpus(path):
         filepath = os.path.join(os.getcwd(), path)

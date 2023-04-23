@@ -17,11 +17,6 @@
     <title>pel_mel</title>
 
     <style>
-        #table_organisations tbody,
-        #table_personnes tbody {
-            height: 500px;
-            overflow-y: auto !important;
-        }
 
         #spinner-container {
             position: fixed;
@@ -55,7 +50,7 @@
     <nav class="navbar navbar-light bg-light">
         <form class="container-fluid justify-content-start" style="width: 100vw;">
             <button class="btn btn-outline-success me-2" type="button">Fusion</button>
-            <button class="btn btn-sm btn-outline-secondary" type="button">Aide</button>
+            <button class="btn btn-outline-secondary" type="button">Aide</button>
         </form>
     </nav>
     <div id="spinner-container" style="display: none;">
@@ -68,12 +63,12 @@
         <fieldset style="text-align: center;">
             {% csrf_token %}
             <input type="file" class="form-control-file" id="corpus" name="corpus" accept=".txt" required>
-            <input type="submit" class="btn btn-primary" value="Lancer la recherche des ENs">
+            <input type="submit" class="btn btn-outline-primary" value="Lancer la recherche des ENs">
         </fieldset>
     </form>
 
 
-    <table style="width: 100vw; margin: 5vw;">
+    <table style="width: 90vw; margin: 5vw;">
         <tr>
             <th style="text-align: center;">Entités Nommées (Personnes)</th>
             <th style="text-align: center;">Entités Nommées (Organisations)</th>
@@ -81,38 +76,45 @@
         <tr>
             <td style="text-align: center;">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-secondary">Ouvrir</button>
-                    <button type="button" class="btn btn-secondary">Valider</button>
+                    <button type="button" class="btn btn-outline-secondary">Ouvrir</button>
+                    <button type="button" class="btn btn-outline-secondary">Valider</button>
                 </div>
             </td>
             <td style="text-align: center;">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-secondary">Ouvrir</button>
-                    <button type="button" class="btn btn-secondary">Valider</button>
+                    <button type="button" class="btn btn-outline-secondary">Ouvrir</button>
+                    <button type="button" class="btn btn-outline-secondary">Valider</button>
                 </div>
             </td>
         </tr>
-        <tr>
-            <td style="vertical-align: top; height: 500px; overflow-y: auto;" >
-                <table class="table" style="margin-right: 4vw;" id="table_personnes">
+        <tr style=" margin: 4vw;">
+            <td style="vertical-align: top; height: 500px; padding:4vw " >
+                <table class="table"  id="table_personnes">
                     <thead>
 
                         <th style="width: 10px;">Num</th>
                         <th>Personnes</th>
 
                     </thead>
+                    <tbody id="table_personnes"></tbody>
                     {{table_personnes}}
+                </tbody>
+                    
                 </table>
             </td>
-            <td style="vertical-align: top; height: 500px;  overflow-y: auto;">
-                <table class="table" id="table_organisations" style="margin-right: 4vw;">
+            <td style="vertical-align: top; height: 500px;padding: 4vw; ">
+                <table class="table" id="table_organisations">
                     <thead>
 
                         <th style="width: 10px;">Num</th>
                         <th>Organisations</th>
 
                     </thead>
+                    <tbody id="table_organisations"></tbody>
                     {{table_organisations}}
+                    </tbody>
+                    
+                    
                 </table>
             </td>
         </tr>

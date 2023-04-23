@@ -32,7 +32,8 @@ $('#my-form').on('submit', function (event) {
                 $('.spinner-border').hide();
                 $('#spinner-container').hide();
                 // Affiche les tables HTML renvoyées
-                if($('#termes')){
+                
+                if($('#termes').length){
                     $('#termes').html(data.termes)
                 }else{
                     $('#table_personnes').html(data.table_personnes);

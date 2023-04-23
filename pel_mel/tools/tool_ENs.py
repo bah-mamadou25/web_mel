@@ -172,7 +172,7 @@ def csv_to_html_table(csv_path):
     :return: Une chaîne de caractères représentant une table HTML avec les données du fichier CSV.
     :rtype: str
     """
-    html_table = "<tbody>\n"
+    html_table = ""
     with open(csv_path, 'r') as csv_file:
         reader = csv.reader(csv_file)
         for i, row in enumerate(reader):
@@ -181,7 +181,7 @@ def csv_to_html_table(csv_path):
                 for element in data.split(';'):
                     html_table += "<td>{}</td>".format(element)
             html_table += "</tr>\n"
-    html_table += "</tbody>"
+   
     return html_table
 
 
@@ -211,3 +211,14 @@ def fusion_files(dir_path, endwith, output_file):
         for f in filtered_files:
             with open(f, 'r') as in_file:
                 out_file.write(in_file.read())
+                
+    supprimer_doublons_fichier(output_file)
+                
+
+
+def supprimer_doublons_fichier(chemin_fichier):
+    try:
+        commande = f"sort {chemin_fichier} | uniq > {chemin_fichier}.tmp && mv {chemin_fichier}.tmp {chemin_fichier}"
+        subprocess.run(commande, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Erreur lors de l'exécution de la commande : {e}")

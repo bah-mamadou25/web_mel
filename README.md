@@ -1,46 +1,52 @@
+
 # web_mel
 
 ## Description
-Ce projet est une application web développée avec Django. Elle consiste à transformer un logiciel bureautique de traitement automatique de langue en version web
+Ce projet est une application web développée avec Django. Elle consiste à transformer un logiciel bureautique de classification de documents électroniques en application web
 
 ## Prérequis
 - Python 3.x
 - pip
 
 ## Installation
-1. Clonez ce dépôt sur votre machine locale :
+ - Clonez ce dépôt sur votre machine locale :
     ```
-        git clone https://github.com/username/nom-du-projet.git
+    git clone https://github.com/bah-mamadou25/web_mel.git
     ``` 
     
 
-2. Déplacez-vous dans le répertoire du projet :
+ - Déplacez-vous dans le répertoire du projet :
     ```
     cd nom-du-projet
     ```
+ - Isolez votre projet à l'aide d'un environement virtuel : nous utiliserons *virtualenv* 
 
-3. Installez les dépendances requises :
+	 - `pip install virtualenv` 
+	 - `virtualenv env` où "env" est le nom de votre environnement virtuel
+	 - Activez votre environnement virtuel : `source env/bin/activate` 
+
+ - Installez les dépendances requises :
     ```
     pip install -r requirements.txt
     ```
+    
 
-4. Exécutez les migrations de la base de données :
+ - Exécutez les migrations de la base de données :
     ```
-        python manage.py migrate
+     ~~python manage.py migrate~~
     ```
-5. Lancez le serveur de développement :
+ - Lancez le serveur de développement :
     ```
-        python manage.py runserver
+    python manage.py runserver
     ```
 
-6. Ouvrez votre navigateur web à l'adresse suivante : <br>
+ - Ouvrez votre navigateur web à l'adresse suivante : <br>
     http://127.0.0.1:8000/
     
 
-7. Vous pouvez maintenant utiliser l'application.
+ - Vous pouvez maintenant utiliser l'application.
 
 ## Contribution
 Si vous souhaitez contribuer à ce projet, veuillez suivre les étapes suivantes :
 
 1. ...
-

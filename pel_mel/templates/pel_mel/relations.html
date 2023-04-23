@@ -48,10 +48,11 @@
             <div id="patterns"
                 style=" display: inline-block ;width: 500px; height: 15vh; overflow: auto;text-align: left;">
                 {%for pattern in patterns %}
-                <div class="form-check form-switch form-check-inline">
+                <div class="form-check form-switch form-check-inline" >
                     <input type="checkbox" class="form-check-input" id="{{pattern}}" name="selected_patterns" value="{{pattern}}" checked >
                     <label class="form-check-label" for="{{pattern}}">{{pattern}}</label><br>
                 </div>
+                <br>
                 {%endfor %}
 
             </div>

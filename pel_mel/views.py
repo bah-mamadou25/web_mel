@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.utils.safestring import mark_safe
 from django.http import JsonResponse
-from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns
+from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns,tool_word2vec
 import time,os
 
 
@@ -16,8 +16,9 @@ def accueil(request):
             fs = FileSystemStorage()
             fs.save('data/'+fichier.name, fichier)
             tool_load_file.extract_file('data/'+fichier.name)
-            print(fichier.name)
-            tool_load_file.createCorpus('data/'+fichier.name,'workspace/corpus.txt')
+            
+            tool_load_file.createCorpus( os.path.splitext('data/'+fichier.name)[0],'workspace/corpus.txt')
+            print(os.path.splitext('data/'+fichier.name)[0])
             return tool_load_file.download_corpus("workspace/corpus.txt")
         
         elif request.FILES.get('corpus'):
@@ -106,6 +107,41 @@ def relations(request):
         table_relations=tool_ENs.csv_to_html_table('workspace/relations/relations.csv') 
         nb_relations=tool_termes.get_number_of_sentences('workspace/relations/relations.csv')
      return render(request,'pel_mel/relations.html',{'patterns':patterns,'nb_relations': nb_relations,'table_relations': mark_safe(table_relations)})
+ 
+def word2vec(request):
+    if request.method == 'POST':
+        
+        if request.FILES.get('corpus'):
+            tool_ENs.create_dir('workspace/word2vec')
+            tool_ENs.create_dir('data')
+            fichier = request.FILES['corpus']
+            fs = FileSystemStorage()
+            fs.save('data/'+fichier.name, fichier)
+            tool_load_file.extract_file('data/'+fichier.name)
+            lowercase=False
+            ponctuation=False
+            lemm=False
+            del_mt_words=False
+            rmv_words_less_than_3_chars=False
+            fichier = request.FILES['corpus']
+            fs = FileSystemStorage()
+            fs.save('data/'+fichier.name, fichier)
+            if request.POST.get('lowerCase'):
+                lowercase=True 
+            if request.POST.get('ponctuation'):
+                ponctuation=True
+            if request.POST.get('lemm'):
+                lemm=True 
+            if request.POST.get('vide'):
+                del_mt_words=True
+            if request.POST.get('troisChar'):
+                rmv_words_less_than_3_chars=True
+
+            corpus_traite=tool_word2vec.preprocessing_word2vec('data/'+fichier.name,lowercase,ponctuation,lemm,del_mt_words,rmv_words_less_than_3_chars)
+            tool_word2vec.write_final_corpus(corpus_traite,'workspace/word2vec/corpus_traite.txt')
+            return tool_load_file.download_corpus('workspace/word2vec/corpus_traite.txt')
+    return render(request,'pel_mel/word2vec.html',{})
+
 
 
 
@@ -135,7 +171,7 @@ def enAPI(request):
             'table_personnes': table_personnes,
             'table_organisations': table_organisations,
         }   
-
+    
     return JsonResponse(data)
 
 def termesAPI(request):

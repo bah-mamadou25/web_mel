@@ -94,9 +94,9 @@
               </select>
               <br><br>
               <label for="min">Nombre min de mots dans un terme : </label>
-              <input type="number" name="min" id="min" min="1" style="width: 70px;" required> <br><br>
+              <input type="number" name="min" id="min" min="1" value="1" style="width: 70px;" required> <br><br>
               <label for="min">Nombre max de mots dans un terme : </label>
-              <input type="number" name="max" id="max" min="1" style="width: 70px;" required>
+              <input type="number" name="max" id="max" min="1" value="4" style="width: 70px;" required>
               <br><br>
 
               <input type="submit" class="btn btn-primary" value="Lancer la recherche des termes">
@@ -119,7 +119,7 @@
             </label>
           </div>
     </div>
-    <table class="table" id="termes" style="width: 70vw;margin: auto; text-align: center;">
+    <table class="table" style="width: 70vw;margin: auto; text-align: center;">
         <thead>
           <tr>
             <th scope="col" style="width:50px">Num</th>
@@ -128,7 +128,10 @@
             <th scope="col">Source</th>
           </tr>
         </thead>
-        {{termes}}
+        <tbody id="termes">
+
+        </tbody>
+       
       </table>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
