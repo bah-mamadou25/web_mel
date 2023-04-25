@@ -2,7 +2,7 @@ import os,re,subprocess,shutil,csv
 
 import spacy
 from .tool_load_file import read_text
-
+from .project_params import workspace_path
 
 def write_ENs(ENs_list, output_file_path):
     """
@@ -41,24 +41,24 @@ def get_number_of_sentences(corpus_path):
     sentences = fr.readlines()
     return len(sentences)
 
-def split_list_of_phrases(corpus_path):
+def split_list_of_phrases(request,corpus_path):
     """
     Permet de diviser une longue liste de phrases sur plusieurs listes
     :param corpus_path : chemin vers le corpus
     """
     #pathTo, FileName = os.path.split(corpus_path)
-    create_dir('data/bulky')
+    create_dir(workspace_path(request)+'data/bulky')
 
-    os.system('split -l 12000 ' + corpus_path + ' data/bulky/')
-    for file_name in os.listdir('data/bulky'):
+    os.system('split -l 12000 ' + corpus_path + ' '+workspace_path(request)+'data/bulky/')
+    for file_name in os.listdir(workspace_path(request)+'data/bulky'):
         print(file_name)
         # Exécution de la fonction sur chaque nom de fichier
-        get_named_entities('data/bulky/'+file_name, 'workspace/ENs/'+file_name+'_pers.csv', 'workspace/ENs/'+file_name+'_org.csv')
+        get_named_entities(request,workspace_path(request)+'data/bulky/'+file_name,workspace_path(request)+'workspace/ENs/'+file_name+'_pers.csv', workspace_path(request)+'workspace/ENs/'+file_name+'_org.csv')
 
    
 
 
-def get_named_entities(input_text_path, output_per_path, output_org_path):
+def get_named_entities(request,input_text_path, output_per_path, output_org_path):
     
     number_of_sentences = get_number_of_sentences(input_text_path)
     
@@ -74,7 +74,7 @@ def get_named_entities(input_text_path, output_per_path, output_org_path):
     else:
         # le fichier est très volumineux, il faut le découper en plusieurs fichiers et renvoyer
         # un message d'erreur à l'interface
-        split_list_of_phrases(input_text_path)
+        split_list_of_phrases(request,input_text_path)
 
         return 'too_bulky'
 
@@ -139,7 +139,7 @@ def getENs(input_text_path):
     ens_list.append(sorted(org_list))
     return ens_list
 
-def get_named_entities(input_text_path, output_per_path, output_org_path):
+def get_named_entities(request,input_text_path, output_per_path, output_org_path):
     number_of_sentences = get_number_of_sentences(input_text_path)
     if number_of_sentences < 12050:
         ens_list = getENs(input_text_path)
@@ -152,14 +152,14 @@ def get_named_entities(input_text_path, output_per_path, output_org_path):
     else:
         # le fichier est très volumineux, il faut le découper en plusieurs fichiers et renvoyer
         # un message d'erreur à l'interface
-        split_list_of_phrases(input_text_path)
+        split_list_of_phrases(request,input_text_path)
         return 'too_bulky'
     
 
 def create_dir(dir):
     if os.path.exists(dir):
         shutil.rmtree(dir)
-    os.mkdir(dir)
+    os.makedirs(dir, exist_ok=True)
 
 
 
@@ -174,14 +174,23 @@ def csv_to_html_table(csv_path):
     """
     html_table = ""
     with open(csv_path, 'r') as csv_file:
-        reader = csv.reader(csv_file)
+        reader = csv.reader(csv_file, delimiter=';')
         for i, row in enumerate(reader):
             html_table += "<tr><td>{}</td>".format(i+1)
             for data in row:
-                for element in data.split(';'):
-                    html_table += "<td>{}</td>".format(element)
+                html_table += "<td>{}</td>".format(data)
             html_table += "</tr>\n"
-   
+
+    return html_table
+
+def vec_to_html_table(vec):
+    html_table = ""
+    for i in range(len(vec)):
+        term = vec.index_to_key[i]
+        html_table += "<tr>"
+        html_table += "<td>{}</td>".format(i)
+        html_table += "<td>{}</td>".format(term)
+        html_table += "</tr>"
     return html_table
 
 

@@ -1,59 +1,87 @@
 # views.py
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.core.files.storage import FileSystemStorage
 from django.utils.safestring import mark_safe
 from django.http import JsonResponse
-from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns,tool_word2vec
+from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns,tool_word2vec,project_params
 import time,os
-
+from .models import User
 
 # Create your views here.
+def connex(request):
+    
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            user = None
+            
+        if user and user.check_password(password):
+            request.session['username'] = username
+            return redirect('accueil')
+        else:
+            message = 'Nom d\'utilisateur ou mot de passe invalide.'
+    else:
+        message = None
+        
+    return render(request, 'pel_mel/log.html', {'message': message})
+    
 
 def accueil(request):
     if request.method == 'POST':
         if request.FILES.get('zipFile'):
             fichier = request.FILES['zipFile']
             fs = FileSystemStorage()
-            fs.save('data/'+fichier.name, fichier)
-            tool_load_file.extract_file('data/'+fichier.name)
+            fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)
+            tool_load_file.extract_file(project_params.workspace_path(request)+'data/'+fichier.name)
             
-            tool_load_file.createCorpus( os.path.splitext('data/'+fichier.name)[0],'workspace/corpus.txt')
-            print(os.path.splitext('data/'+fichier.name)[0])
-            return tool_load_file.download_corpus("workspace/corpus.txt")
+            tool_load_file.createCorpus( os.path.splitext(project_params.workspace_path(request)+'data/'+fichier.name)[0],project_params.workspace_path(request)+'workspace/corpus.txt')
+            print(os.path.splitext(project_params.workspace_path(request)+'data/'+fichier.name)[0])
+            return tool_load_file.download_corpus(project_params.workspace_path(request)+"workspace/corpus.txt")
         
         elif request.FILES.get('corpus'):
 
             fichier = request.FILES['corpus']
             fs = FileSystemStorage()
-            fs.save('data/'+fichier.name, fichier)
+            fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)
            
-            tool_load_file.cleanUpCorpus('data/'+fichier.name,'workspace/cleaned_'+fichier.name)
+            tool_load_file.cleanUpCorpus(project_params.workspace_path(request)+'data/'+fichier.name,project_params.workspace_path(request)+'workspace/cleaned_'+fichier.name)
             if 'toSplit' in request.POST:
-                tool_load_file.retrieveSentences('workspace/cleaned_'+fichier.name)
-                return tool_load_file.download_directory_as_zip('workspace')
+                tool_load_file.retrieveSentences(project_params.workspace_path(request)+'workspace/cleaned_'+fichier.name)
+                return tool_load_file.download_directory_as_zip(project_params.workspace_path(request)+'workspace')
             else:
-                return tool_load_file.download_corpus('workspace/cleaned_'+fichier.name)
+                return tool_load_file.download_corpus(project_params.workspace_path(request)+'workspace/cleaned_'+fichier.name)
 
     return render(request,'pel_mel/index.html',{})
 
 def en(request):
+
     table_personnes=''
     table_organisations=''
     if request.FILES.get('corpus'):
-            
-            tool_ENs.create_dir('workspace/ENs')
-            tool_ENs.create_dir('data')
+            print(project_params.workspace_path(request)+'workspace/ENs')
+            tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/ENs')
+            tool_ENs.create_dir(project_params.workspace_path(request)+'data')
             fichier = request.FILES['corpus']
             fs = FileSystemStorage()
-            fs.save('data/'+fichier.name, fichier)    
-            tool_ENs.get_named_entities('data/'+fichier.name,'workspace/ENs/pers.csv','workspace/ENs/org.csv')
+            fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier) 
+               
+            tool_ENs.get_named_entities(request,project_params.workspace_path(request)+'data/'+fichier.name,
+                                        project_params.workspace_path(request)+'workspace/ENs/pers.csv',
+                                        project_params.workspace_path(request)+'workspace/ENs/org.csv')
 
-            if os.path.exists("data/bulky"):
-                tool_ENs.fusion_files("workspace/ENs","pers.csv","workspace/ENs/pers.csv")
-                tool_ENs.fusion_files("workspace/ENs","org.csv","workspace/ENs/org.csv")
+            if os.path.exists(project_params.workspace_path(request)+"data/bulky"):
+                tool_ENs.fusion_files(project_params.workspace_path(request)+"workspace/ENs","pers.csv",
+                                      project_params.workspace_path(request)+"workspace/ENs/pers.csv")
+                tool_ENs.fusion_files(project_params.workspace_path(request)+"workspace/ENs","org.csv",
+                                      project_params.workspace_path(request)+"workspace/ENs/org.csv")
 
-            table_personnes=tool_ENs.csv_to_html_table('workspace/ENs/pers.csv') 
-            table_organisations=tool_ENs.csv_to_html_table('workspace/ENs/org.csv') 
+            table_personnes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/pers.csv') 
+            table_organisations=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/org.csv') 
+            
     return render(request,'pel_mel/en.html',{'table_personnes': mark_safe(table_personnes), 'table_organisations': mark_safe(table_organisations),})
     
 
@@ -63,23 +91,25 @@ def en(request):
 def termes(request):
      termes=''
      if request.FILES.get('corpus'):      
-        tool_ENs.create_dir('data')
-        tool_ENs.create_dir('workspace/termes')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'data')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/termes')
         fichier = request.FILES['corpus']
         stem="False"
         fs = FileSystemStorage()
-        fs.save('data/'+fichier.name, fichier)  
+        fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)  
         if request.POST.get('reduire'):
             stem="True"         
                
         methodeScoring = request.POST['methodeScoring']
         minimum=request.POST['min']
         maximum=request.POST['max']
-        tool_termes.terms_extraction('data/'+fichier.name,'workspace/termes/termes.csv',stem,methodeScoring,minimum,maximum)
-        if os.path.exists("data/bulky"):
-            tool_ENs.fusion_files("workspace/termes","termes.csv","workspace/termes/termes.csv")            
+        tool_termes.terms_extraction(project_params.workspace_path(request)+'data/'+fichier.name,
+                                     project_params.workspace_path(request)+'workspace/termes/termes.csv',stem,methodeScoring,minimum,maximum)
+        if os.path.exists(project_params.workspace_path(request)+"data/bulky"):
+            tool_ENs.fusion_files(project_params.workspace_path(request)+"workspace/termes","termes.csv",
+                                  project_params.workspace_path(request)+"workspace/termes/termes.csv")            
 
-        termes=tool_ENs.csv_to_html_table('workspace/termes/termes.csv') 
+        termes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/termes/termes.csv') 
       
      return render(request,'pel_mel/termes.html',{'termes':mark_safe(termes)})
 
@@ -136,10 +166,10 @@ def word2vec(request):
                 del_mt_words=True
             if request.POST.get('troisChar'):
                 rmv_words_less_than_3_chars=True
-
+            
             corpus_traite=tool_word2vec.preprocessing_word2vec('data/'+fichier.name,lowercase,ponctuation,lemm,del_mt_words,rmv_words_less_than_3_chars)
-            tool_word2vec.write_final_corpus(corpus_traite,'workspace/word2vec/corpus_traite.txt')
-            return tool_load_file.download_corpus('workspace/word2vec/corpus_traite.txt')
+            tool_word2vec.save_phrases_to_csv(corpus_traite,'workspace/word2vec/corpus_traite.csv')
+            return tool_load_file.download_corpus('workspace/word2vec/corpus_traite.csv')
     return render(request,'pel_mel/word2vec.html',{})
 
 
@@ -151,21 +181,26 @@ def word2vec(request):
 
 def enAPI(request):
     table_personnes=''
-    table_organisations=''       
+    table_organisations=''  
+    
     if request.FILES.get('corpus'):
-        tool_ENs.create_dir('workspace/ENs')
-        tool_ENs.create_dir('data')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/ENs')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'data')
         fichier = request.FILES['corpus']
         fs = FileSystemStorage()
-        fs.save('data/'+fichier.name, fichier)
-        tool_ENs.get_named_entities('data/'+fichier.name, 'workspace/ENs/pers.csv', 'workspace/ENs/org.csv')
+        fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)
+        tool_ENs.get_named_entities(request,project_params.workspace_path(request)+'data/'+fichier.name, 
+                                    project_params.workspace_path(request)+'workspace/ENs/pers.csv',
+                                    project_params.workspace_path(request)+'workspace/ENs/org.csv')
 
-        if os.path.exists("data/bulky"):
-            tool_ENs.fusion_files("workspace/ENs","pers.csv","workspace/ENs/pers.csv")
-            tool_ENs.fusion_files("workspace/ENs","org.csv","workspace/ENs/org.csv")
+        if os.path.exists(project_params.workspace_path(request)+"data/bulky"):
+            tool_ENs.fusion_files(project_params.workspace_path(request)+"workspace/ENs","pers.csv",
+                                  project_params.workspace_path(request)+"workspace/ENs/pers.csv")
+            tool_ENs.fusion_files(project_params.workspace_path(request)+"workspace/ENs","org.csv",
+                                  project_params.workspace_path(request)+"workspace/ENs/org.csv")
 
-        table_personnes = tool_ENs.csv_to_html_table('workspace/ENs/pers.csv')
-        table_organisations = tool_ENs.csv_to_html_table('workspace/ENs/org.csv')
+        table_personnes = tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/pers.csv')
+        table_organisations = tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/org.csv')
 
     data = {
             'table_personnes': table_personnes,
@@ -177,25 +212,88 @@ def enAPI(request):
 def termesAPI(request):
      termes=''
      if request.FILES.get('corpus'):      
-        tool_ENs.create_dir('data')
-        tool_ENs.create_dir('workspace/termes')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'data')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/termes')
         fichier = request.FILES['corpus']
         stem="False"
         fs = FileSystemStorage()
-        fs.save('data/'+fichier.name, fichier)  
+        fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)  
         if request.POST.get('reduire'):
             stem="True"         
                
         methodeScoring = request.POST['methodeScoring']
         minimum=request.POST['min']
         maximum=request.POST['max']
-        tool_termes.terms_extraction('data/'+fichier.name,'workspace/termes/termes.csv',stem,methodeScoring,minimum,maximum)
-        if os.path.exists("data/bulky"):
-            tool_ENs.fusion_files("workspace/termes","termes.csv","workspace/termes/termes.csv")            
+        tool_termes.terms_extraction(project_params.workspace_path(request)+'data/'+fichier.name,
+                                     project_params.workspace_path(request)+'workspace/termes/termes.csv',stem,methodeScoring,minimum,maximum)
+        
+        if os.path.exists(project_params.workspace_path(request)+"data/bulky"):
+            tool_ENs.fusion_files(project_params.workspace_path(request)+"workspace/termes","termes.csv",
+                                  project_params.workspace_path(request)+"workspace/termes/termes.csv")            
 
-        termes=tool_ENs.csv_to_html_table('workspace/termes/termes.csv') 
+        termes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/termes/termes.csv') 
         data = {
             'termes': termes
         } 
       
      return JsonResponse(data)
+
+def trainAPI(request):
+    termes=''
+    if request.FILES.get('corpusTraite'):      
+        tool_ENs.create_dir('data')
+        tool_ENs.create_dir('workspace/termes')
+        fichier = request.FILES['corpusTraite']
+        
+        fs = FileSystemStorage()
+        fs.save('data/'+fichier.name, fichier)  
+
+        entry_label_vector_size = request.POST['mots']
+        entry_label_window=request.POST['fenetre']
+        list_sentences=tool_word2vec.read_csv_file_to_list_sentences('data/'+fichier.name)
+        termes = tool_word2vec.similar_terms_untrained_model(list_sentences, int(entry_label_vector_size), int(entry_label_window))
+
+        data = {
+            'termes':  tool_ENs.vec_to_html_table(termes)
+        } 
+      
+    return JsonResponse(data)
+
+
+def useTermesAPI(request):
+    termesSimilaires=''
+    if request.FILES.get('corpusTermes'):      
+        tool_ENs.create_dir('data')
+        tool_ENs.create_dir('workspace/word2vec')
+        fichier = request.FILES['corpusTermes']
+       
+        fs = FileSystemStorage()
+        fs.save('data/'+fichier.name, fichier)  
+
+        tool_word2vec.similar_terms('word2vec_models/frWac_no_postag_phrase_500_cbow_cut100.bin','data/'+fichier.name,'workspace/word2vec/termes_sim.csv')
+        
+        termesSimilaires=tool_ENs.csv_to_html_table('workspace/word2vec/termes_sim.csv')
+        data = {
+            'termesSimilaires' :termesSimilaires
+        } 
+      
+    return JsonResponse(data)
+
+def thematiqueAPI(request):
+    thematiques=''
+    if request.FILES.get('corpusThematique'):      
+        tool_ENs.create_dir('data')
+        tool_ENs.create_dir('workspace/word2vec')
+        fichier = request.FILES['corpusThematique']
+       
+        fs = FileSystemStorage()
+        fs.save('data/'+fichier.name, fichier)  
+        deep=request.POST['profondeur']
+        tool_word2vec.get_similar_terms_for_theme_controller('word2vec_models/frWac_no_postag_phrase_500_cbow_cut100.bin','data/'+fichier.name,int(deep),'workspace/word2vec/thematiques_sim.csv')
+    thematiques=tool_ENs.csv_to_html_table('workspace/word2vec/thematiques_sim.csv')   
+    print(thematiques) 
+    data = {
+        'thematiques': thematiques  
+    } 
+      
+    return JsonResponse(data)

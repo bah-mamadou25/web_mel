@@ -96,10 +96,16 @@ def split_list_of_phrases(corpus_path, STEM, METODE_SCORING, LONGUEURMIN, LONGUE
     Permet de diviser une longue liste de phrases sur plusieurs listes
     :param corpus_path : chemin vers le corpus
     """
-    create_dir('data/bulky')
+    dir=str(os.path.dirname(corpus_path))[2:]
+    parent_dir=str(os.path.dirname(dir))
+    print('----------------------')
+    print(dir)
+    print(parent_dir)
+    print('----------------------')
+    create_dir(dir+'/bulky')
 
-    os.system('split -l 12000 ' + corpus_path + ' data/bulky/')
-    for file_name in os.listdir('data/bulky'):
+    os.system('split -l 12000 ' + corpus_path + ' '+dir+'/bulky/')
+    for file_name in os.listdir(dir+'/bulky'):
         print(file_name)
         # Exécution de la fonction sur chaque nom de fichier
-        terms_extraction('data/bulky/'+file_name, 'workspace/termes/'+file_name+'_termes.csv', STEM, METODE_SCORING, LONGUEURMIN, LONGUEURMAX)
+        terms_extraction(dir+'/bulky/'+file_name, parent_dir+'/workspace/termes/'+file_name+'_termes.csv', STEM, METODE_SCORING, LONGUEURMIN, LONGUEURMAX)

@@ -1,11 +1,12 @@
     # -*- coding: utf-8 -*-
 
-import string
+import string,csv
 
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-from gensim.models import Word2Vec, KeyedVectors
+from gensim.models import Word2Vec,KeyedVectors
+from typing import List
 
 
 
@@ -46,7 +47,37 @@ def write_final_corpus(corpus, output_path):
     """
     final_text = reform_text(corpus)
     write_corpus(final_text, output_path)
+    
+    
+def save_phrases_to_csv(phrases: List[List[str]], file_path: str) -> None:
+    """
+    Save a list of phrases to a CSV file.
 
+    Args:
+        phrases (List[List[str]]): List of phrases, where each phrase is a list of words.
+        file_path (str): The path to the CSV file to be created.
+
+    Returns:
+        None
+    """
+    with open(file_path, 'w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file, delimiter=';')
+        for phrase in phrases:
+            writer.writerow(phrase)
+    
+def read_csv_file_to_list_sentences(file_path):
+    """
+    :param file_path: chemin du fichier CSV à lire
+    :return: une liste de phrases, où chaque phrase est une liste de mots
+    """
+    with open(file_path, newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';', quotechar='"')
+        phrases = []
+        for row in reader:
+            phrases.append(row)
+        return phrases
+    
+    
 def similar_terms(model_path, terms_path, result_path):
     get_similar_terms(model_path, terms_path, result_path)
 
@@ -190,6 +221,7 @@ def remove_words_less_than_3_chars(corpus_sw):
     """
     return [[mot for mot in doc if (len(mot) >= 3)] for doc in corpus_sw]
 
+
 def reform_text(corpus_sw):
     """
     :param corpus_sw:
@@ -204,7 +236,10 @@ def get_model(corpus, vector_size, window):
     :param window:
     :return: le modèle entrainé
     """
-    mod = Word2Vec(corpus, vector_size=vector_size, window=window)
+    
+    mod = Word2Vec(vector_size=vector_size, window=window)
+    mod.build_vocab(corpus)
+    mod.train(corpus, total_examples=len(corpus), epochs=mod.epochs)
     return mod
 
 def get_words(mod):
@@ -229,6 +264,7 @@ def prepare_terms_list(terms_path):
         if line.strip().split(";")[0] not in prepared_terms_list:
             line = line.replace("’ ", "'").replace("' ", "'").replace(' ', '_')
             prepared_terms_list.append(str(line).strip().split(';')[0])
+    
     return prepared_terms_list
 
 
@@ -287,7 +323,7 @@ def get_similar_terms_for_theme(model_path, theme, levels):
     """
     themes_list = []
     themes_list.append(theme)
-    for level in range(levels):
+    for level in range(int(levels)):
         s_words = get_similar_terms_for_themes_list(model_path, themes_list)
         for s_word in s_words:
             if s_word[0] not in themes_list:

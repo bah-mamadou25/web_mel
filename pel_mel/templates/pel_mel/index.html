@@ -133,15 +133,15 @@
       <div class="flex-grow-1 text-center d-flex align-items-center justify-content-center">
         <div class="container">
             <div class="row">
-              <div class="col"><a class="btn btn-outline-primary" href="./en" role="button">Entités Nommées</a></div>
-              <div class="col"><a class="btn btn-outline-primary" href="./termes" role="button">Termes</a></div>
+              <div class="col"><a class="btn btn-outline-primary" href="{% url 'en' %}" role="button">Entités Nommées</a></div>
+              <div class="col"><a class="btn btn-outline-primary" href="{% url 'termes' %}"  role="button">Termes</a></div>
             </div>
             <hr>
             <p class="h3">Extraction de relation sémentiques entre termes</p>
             <div class="container">
                 <div class="row">
-                  <div class="col"><a class="btn btn-outline-primary" href="./relations" role="button">Méthode des patrons</a></div>
-                  <div class="col"><a class="btn btn-outline-primary" href="./word2vec" role="button">Méthode symbolique <br> (Word2Vec)</a></div>
+                  <div class="col"><a class="btn btn-outline-primary" href="{% url 'relations' %}"   role="button">Méthode des patrons</a></div>
+                  <div class="col"><a class="btn btn-outline-primary" href="{% url 'word2vec' %}"  role="button">Méthode symbolique <br> (Word2Vec)</a></div>
                 </div>
                 <hr>
                 <div ><a class="btn btn-outline-primary" href="#" role="button">Classification de messages <br> (Doc2Vec)</a></div>
