@@ -35,7 +35,11 @@ $('#my-form').on('submit', function (event) {
                 
                 if($('#termes').length){
                     $('#termes').html(data.termes)
-                }else{
+                }
+                else if ($('#table_relations').length){
+                    $('#table_relations').html(data.table_relations);
+                }
+                else{
                     $('#table_personnes').html(data.table_personnes);
                     $('#table_organisations').html(data.table_organisations);
                 }

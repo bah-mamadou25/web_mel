@@ -120,34 +120,34 @@ def relations(request):
      table_relations=''
      patterns=sorted(tool_relationsPatterns.get_patterns('patterns.txt'))
      if request.method == 'POST':
-        tool_ENs.create_dir('workspace/relations')
-        tool_ENs.create_dir('data')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/relations')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'data')
         corpus = request.FILES['corpus']
         fs = FileSystemStorage()
-        fs.save('data/'+corpus.name, corpus)   
+        fs.save(project_params.workspace_path(request)+'data/'+corpus.name, corpus)   
         termes = request.FILES['termes']
         fs = FileSystemStorage()
-        fs.save('data/'+termes.name, termes) 
+        fs.save(project_params.workspace_path(request)+'data/'+termes.name, termes) 
         
         selected_patterns = request.POST.getlist('selected_patterns')
         rel_selected=', '.join(tool_relationsPatterns.get_relations_from_patterns(selected_patterns))
-        print("before")
-        tool_relationsPatterns.getRelations(selected_patterns, 'data/'+corpus.name, 'data/'+termes.name, rel_selected, 'workspace/relations/relations.csv')
-        print("after")
-        table_relations=tool_ENs.csv_to_html_table('workspace/relations/relations.csv') 
-        nb_relations=tool_termes.get_number_of_sentences('workspace/relations/relations.csv')
+        
+        tool_relationsPatterns.getRelations(selected_patterns, project_params.workspace_path(request)+'data/'+corpus.name,project_params.workspace_path(request)+ 'data/'+termes.name, rel_selected, project_params.workspace_path(request)+'workspace/relations/relations.csv')
+        
+        table_relations=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/relations/relations.csv') 
+        nb_relations=tool_termes.get_number_of_sentences(project_params.workspace_path(request)+'workspace/relations/relations.csv')
      return render(request,'pel_mel/relations.html',{'patterns':patterns,'nb_relations': nb_relations,'table_relations': mark_safe(table_relations)})
  
 def word2vec(request):
     if request.method == 'POST':
         
         if request.FILES.get('corpus'):
-            tool_ENs.create_dir('workspace/word2vec')
-            tool_ENs.create_dir('data')
+            tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/word2vec')
+            tool_ENs.create_dir(project_params.workspace_path(request)+'data')
             fichier = request.FILES['corpus']
             fs = FileSystemStorage()
             fs.save('data/'+fichier.name, fichier)
-            tool_load_file.extract_file('data/'+fichier.name)
+            tool_load_file.extract_file(project_params.workspace_path(request)+'data/'+fichier.name)
             lowercase=False
             ponctuation=False
             lemm=False
@@ -155,7 +155,7 @@ def word2vec(request):
             rmv_words_less_than_3_chars=False
             fichier = request.FILES['corpus']
             fs = FileSystemStorage()
-            fs.save('data/'+fichier.name, fichier)
+            fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)
             if request.POST.get('lowerCase'):
                 lowercase=True 
             if request.POST.get('ponctuation'):
@@ -167,9 +167,9 @@ def word2vec(request):
             if request.POST.get('troisChar'):
                 rmv_words_less_than_3_chars=True
             
-            corpus_traite=tool_word2vec.preprocessing_word2vec('data/'+fichier.name,lowercase,ponctuation,lemm,del_mt_words,rmv_words_less_than_3_chars)
-            tool_word2vec.save_phrases_to_csv(corpus_traite,'workspace/word2vec/corpus_traite.csv')
-            return tool_load_file.download_corpus('workspace/word2vec/corpus_traite.csv')
+            corpus_traite=tool_word2vec.preprocessing_word2vec(project_params.workspace_path(request)+'data/'+fichier.name,lowercase,ponctuation,lemm,del_mt_words,rmv_words_less_than_3_chars)
+            tool_word2vec.save_phrases_to_csv(corpus_traite,project_params.workspace_path(request)+'workspace/word2vec/corpus_traite.csv')
+            return tool_load_file.download_corpus(project_params.workspace_path(request)+'workspace/word2vec/corpus_traite.csv')
     return render(request,'pel_mel/word2vec.html',{})
 
 
@@ -238,19 +238,53 @@ def termesAPI(request):
       
      return JsonResponse(data)
 
+
+def relationsAPI(request):
+     table_relations=''
+     if request.method == 'POST':
+        tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/relations')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'data')
+        corpus = request.FILES['corpus']
+        fs = FileSystemStorage()
+        fs.save(project_params.workspace_path(request)+'data/'+corpus.name, corpus)   
+        termes = request.FILES['termes']
+        fs = FileSystemStorage()
+        fs.save(project_params.workspace_path(request)+'data/'+termes.name, termes) 
+        
+        selected_patterns = request.POST.getlist('selected_patterns')
+        rel_selected=', '.join(tool_relationsPatterns.get_relations_from_patterns(selected_patterns))
+        
+        tool_relationsPatterns.getRelations(selected_patterns, project_params.workspace_path(request)+'data/'+corpus.name,project_params.workspace_path(request)+ 'data/'+termes.name, rel_selected, project_params.workspace_path(request)+'workspace/relations/relations.csv')
+        
+        table_relations=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/relations/relations.csv') 
+       
+        
+        data = {
+            'table_relations': table_relations
+        } 
+        print(table_relations)
+     return JsonResponse(data)
+
+
+
+
+
+
+
+
 def trainAPI(request):
     termes=''
     if request.FILES.get('corpusTraite'):      
-        tool_ENs.create_dir('data')
-        tool_ENs.create_dir('workspace/termes')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'data')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/termes')
         fichier = request.FILES['corpusTraite']
         
         fs = FileSystemStorage()
-        fs.save('data/'+fichier.name, fichier)  
+        fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)  
 
         entry_label_vector_size = request.POST['mots']
         entry_label_window=request.POST['fenetre']
-        list_sentences=tool_word2vec.read_csv_file_to_list_sentences('data/'+fichier.name)
+        list_sentences=tool_word2vec.read_csv_file_to_list_sentences(project_params.workspace_path(request)+'data/'+fichier.name)
         termes = tool_word2vec.similar_terms_untrained_model(list_sentences, int(entry_label_vector_size), int(entry_label_window))
 
         data = {
@@ -263,16 +297,16 @@ def trainAPI(request):
 def useTermesAPI(request):
     termesSimilaires=''
     if request.FILES.get('corpusTermes'):      
-        tool_ENs.create_dir('data')
-        tool_ENs.create_dir('workspace/word2vec')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'data')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/word2vec')
         fichier = request.FILES['corpusTermes']
        
         fs = FileSystemStorage()
-        fs.save('data/'+fichier.name, fichier)  
+        fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)  
 
-        tool_word2vec.similar_terms('word2vec_models/frWac_no_postag_phrase_500_cbow_cut100.bin','data/'+fichier.name,'workspace/word2vec/termes_sim.csv')
+        tool_word2vec.similar_terms('word2vec_models/frWac_no_postag_phrase_500_cbow_cut100.bin',project_params.workspace_path(request)+'data/'+fichier.name,project_params.workspace_path(request)+'workspace/word2vec/termes_sim.csv')
         
-        termesSimilaires=tool_ENs.csv_to_html_table('workspace/word2vec/termes_sim.csv')
+        termesSimilaires=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/word2vec/termes_sim.csv')
         data = {
             'termesSimilaires' :termesSimilaires
         } 
@@ -282,16 +316,18 @@ def useTermesAPI(request):
 def thematiqueAPI(request):
     thematiques=''
     if request.FILES.get('corpusThematique'):      
-        tool_ENs.create_dir('data')
-        tool_ENs.create_dir('workspace/word2vec')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'data')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/word2vec')
         fichier = request.FILES['corpusThematique']
        
         fs = FileSystemStorage()
-        fs.save('data/'+fichier.name, fichier)  
+        fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)  
         deep=request.POST['profondeur']
-        tool_word2vec.get_similar_terms_for_theme_controller('word2vec_models/frWac_no_postag_phrase_500_cbow_cut100.bin','data/'+fichier.name,int(deep),'workspace/word2vec/thematiques_sim.csv')
-    thematiques=tool_ENs.csv_to_html_table('workspace/word2vec/thematiques_sim.csv')   
-    print(thematiques) 
+        tool_word2vec.get_similar_terms_for_theme_controller('word2vec_models/frWac_no_postag_phrase_500_cbow_cut100.bin',
+                                                             project_params.workspace_path(request)+'data/'+fichier.name,int(deep),
+                                                             project_params.workspace_path(request)+'workspace/word2vec/thematiques_sim.csv')
+    thematiques=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/word2vec/thematiques_sim.csv')   
+    
     data = {
         'thematiques': thematiques  
     } 

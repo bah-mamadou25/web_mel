@@ -11,6 +11,7 @@ urlpatterns = [
     path("termes/",views.termes,name="termes"),
     path("termesAPI/", views.termesAPI, name="termesAPI"),
     path("relations/",views.relations,name="relations"),
+    path("relationsAPI/",views.relationsAPI,name="relationsAPI"),
     path("word2vec/",views.word2vec,name="word2vec"),
     path("trainAPI/",views.trainAPI,name="trainAPI"),
     path("useTermesAPI/",views.useTermesAPI,name="useTermesAPI"),
