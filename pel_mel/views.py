@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect
 from django.core.files.storage import FileSystemStorage
 from django.utils.safestring import mark_safe
 from django.http import JsonResponse
-from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns,tool_word2vec,project_params
+from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns,tool_word2vec,project_params,tool_doc2vec
 import time,os
 from .models import User
 
@@ -173,6 +173,73 @@ def word2vec(request):
     return render(request,'pel_mel/word2vec.html',{})
 
 
+
+
+def doc2vec(request):
+    resultat=''
+    tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/doc2vec')
+    tool_ENs.create_dir(project_params.workspace_path(request)+'data')
+            
+    if request.method == 'POST':
+        if request.FILES.get('thematiques') and request.FILES.get('corpus'):
+            fichier_thems = request.FILES['thematiques']
+            corpus = request.FILES['corpus']
+            
+            fs = FileSystemStorage()
+            fs.save(project_params.workspace_path(request)+'data/'+fichier_thems.name, fichier_thems)
+            fs.save(project_params.workspace_path(request)+'data/'+corpus.name, corpus)
+            
+            tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/doc2vec/thematique_plus_nuage_de_mots')
+            
+            pathTo=project_params.workspace_path(request)+'workspace/doc2vec/'
+            tool_doc2vec.prepare_themes_for_doc2vec(project_params.workspace_path(request)+'data/'+corpus.name,
+                                                    project_params.workspace_path(request)+'data/'+fichier_thems.name,
+                                                    project_params.workspace_path(request)+'workspace/doc2vec/thematique_plus_nuage_de_mots')
+            return tool_load_file.download_directory_as_zip( project_params.workspace_path(request)+'workspace/doc2vec/thematique_plus_nuage_de_mots')
+        else :
+            
+            f_dir_messages=request.FILES.get('msgZip')
+            f_dir_thems=request.FILES.get('thematiquesZip')
+            f_thems1=request.FILES.get('thematique1')
+            f_thems2=request.FILES.get('thematique2')
+            f_thems3=request.FILES.get('thematique3')
+            vector_size=request.POST['dimVec']
+            cont_min=request.POST['freqMin']
+            val_epochs=request.POST['epochs']
+            
+            
+            fs = FileSystemStorage()
+            fs.save(project_params.workspace_path(request)+'data/'+f_dir_messages.name, f_dir_messages)
+            tool_load_file.extract_file(project_params.workspace_path(request)+'data/'+f_dir_messages.name)
+            
+            tool_ENs.create_dir(project_params.workspace_path(request)+'data/nuage_de_mots')
+            fs.save(project_params.workspace_path(request)+'data/nuage_de_mots/'+f_dir_thems.name, f_dir_thems)
+            tool_load_file.extract_file(project_params.workspace_path(request)+'data/nuage_de_mots/'+f_dir_thems.name)
+            os.remove(project_params.workspace_path(request)+'data/nuage_de_mots/'+f_dir_thems.name)
+            
+            fs.save(project_params.workspace_path(request)+'data/'+f_thems1.name, f_thems1)
+            fs.save(project_params.workspace_path(request)+'data/'+f_thems2.name, f_thems2)
+            fs.save(project_params.workspace_path(request)+'data/'+f_thems3.name, f_thems3)
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            rslt=tool_doc2vec.messages_presse_classification(os.path.splitext(project_params.workspace_path(request)+'data/'+f_dir_messages.name)[0],
+                                                             project_params.workspace_path(request)+'data/nuage_de_mots',
+                                                             project_params.workspace_path(request)+'data/'+f_thems1.name,
+                                                             project_params.workspace_path(request)+'data/'+f_thems2.name,
+                                                             project_params.workspace_path(request)+'data/'+f_thems3.name,
+                                                             int(vector_size),int(cont_min),int(val_epochs),project_params.workspace_path(request)+'workspace/doc2vec/resultat.csv')
+
+            
+            resultat=tool_doc2vec.csv_no_header_to_html_table(project_params.workspace_path(request)+'workspace/doc2vec/resultat.csv')
+            
+    return render(request,'pel_mel/doc2vec.html',{'resultat': mark_safe(resultat)})
 
 
 

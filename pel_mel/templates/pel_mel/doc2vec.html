@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/en.css' %}">
+    <script src="{% static 'js/jquery-3.6.4.min.js' %}" defer></script>
+    <script src="{% static 'js/tools.js' %}" defer></script>
+    <script src="{% static 'js/word2vec.js' %}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    <title>pel_mel</title>
+    <style>
+
+
+    </style>
+</head>
+<body style="width: 100vw; text-align: center; ">
+  <nav class="navbar sticky-top bg-body-tertiary" style="background-color: #e8ebde;">
+    <div class="container-sm">
+      <a class="navbar-brand btn btn-sm btn-outline-secondary"data-bs-toggle="modal" data-bs-target="#traitementModal" href="" >Préparer les nuages de mots par thématiques </a>
+      <button class="btn btn btn-outline-info" type="button" data-bs-toggle="modal" data-bs-target="#aideModal">Aide ?</button>
+     
+    </div>
+  </nav>
+              <!-- préparer nuage de mots-->
+              <div class="modal fade" id="traitementModal" tabindex="-1" aria-labelledby="traitementModalLabel" aria-hidden="true" >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="traitementModalLabel">Préparer les nuages de mots par thématiques </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                   
+                    <div class="modal-body">
+                   <form action="" method="post" enctype="multipart/form-data" style="display: inline-block;" >
+                         {% csrf_token %}
+                         <label for="corpus">Sélectionner le corpus nettoyé initial (.txt) : </label>
+                         <input type="file" class="form-control-file" id="corpus" name="corpus" accept=".txt"> 
+                         <br>
+                         <label for="thematiques">Sélectionner les thématiques (.csv) : </label>
+                        <input type="file" class="form-control-file" id="thematiques" name="thematiques" accept=".csv"> 
+                        <br>
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <input type="submit" class="btn btn-primary" value="Préparer" >
+                    </div>
+                  </div>
+                  </form>
+                  </div>
+                </div>
+              </div>     
+
+
+
+<div class="modal fade" id="aideModal" tabindex="-1" aria-labelledby="aideModalLabel" aria-hidden="true" >
+    <div class="modal-dialog d-flex justify-content-center" style="width: 60vw;">
+      <div class="modal-content " style="width: 60vw;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="aideModalLabel">Aide</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="width: 60vw;">
+        <ul>
+            <li>Pour commencer : 
+                <ol style="list-style: upper-roman;">
+                    <li>Au nineau du menu « Fichier » :
+                        <ul>
+                            <li>Créer votre corpus : <ul>
+                                <li>Dans le menu « Fichier », cliquer sur « créer un corpus »;</li>
+                                <li>Sélectionner le répertoire parent qui contient les sous-répertoires / fichiers (.txt, .doc, .pdf, .xml (pour les e-mail)...);</li>
+                                <li>Suivre les indications jusqu'à la fin du processus (création de corpus, nettoyage de corpus, segmentation par phrases);</li>
+                                <li>Le logiciel crée automatiquement un répertoire « workspace » (s'il n'ai pas déjà créé) dans la racine du projet (là où vous avez installé le logiciel).</li>
+                                <li>Dans le workspace, vous trouverez tous les fichiers créés (le corpus initial, le corpus nettoyé, le corpus segmenté en phrases...), ainsi que d'autres répertoires vides (Entités nommées, Termes, Relations...) pour sauvegarder les différents fichiers de sortie par la suite.</li>
+                                <li>Nettoyer un corpus existant.</li>
+                                <li>Visualiser un corpus existant.</li>
+                               
+                            </ul></li>
+  
+                        </ul>
+                    </li>
+                    <li>
+                        Au niveau de cette fenêtre pricipale, il y a 5 boutons principaux :
+                            <ol>
+                                <li>Entités nommées</li>
+                                <li>Termes</li>
+                                <li>Extraction de relations symantiques entre termes par la méthode des patrons</li>
+                                <li>Extraction de relations entre termes par la méthode symbolique (Word2Vec)</li>
+                                <li> Classification des messages par thématiques</li>
+                            </ol>
+                    </li>
+                </ol>
+            </li>
+            
+        </ul>
+
+     <p> Pour les détails d'utilisation de ces 5 boutons, vous allez trouver des guides d'utilisations dans chaque nouvelle fenêtre ouverte.</p>       
+   
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+     <main>
+        
+
+            <form action="{% url 'doc2vec' %}" method="post" enctype="multipart/form-data" style="margin-top: 5px;">
+                <fieldset >
+                    {% csrf_token %}
+
+                    <label for="msgZip"> sélectionner le reperoire des messages zippé : </label>
+                    <input type="file" class="form-control-file" id="msgZip" name="msgZip" accept=".zip" required><br><br>
+
+                    <label for="thematiquesZip"> sélectionner le répertoire des thématiques zippé : </label>
+                    <input type="file" class="form-control-file" id="thematiquesZip" name="thematiquesZip" accept=".zip" required><br><br>
+
+                    <label for="thematique1"> sélectionner la liste des thématiques de niveau 1 : </label>
+                    <input type="file" class="form-control-file" id="thematique1" name="thematique1" accept=".csv" required ><br><br>
+
+                    <label for="thematique2"> sélectionner la liste des thématiques de niveau 2 : </label>
+                    <input type="file" class="form-control-file" id="thematique2" name="thematique2" accept=".csv" required ><br><br>
+
+                    <label for="thematique3"> sélectionner la liste des thématiques de niveau 3 : </label>
+                    <input type="file" class="form-control-file" id="thematique3" name="thematique3" accept=".csv" required><br><br>
+                    
+
+
+
+                    <label for="dimVec">Dimensionnalité des vecteurs d'apprentissage Doc2vec : </label>
+                    <input type="number" name="dimVec" id="dimVec" min="1" value="8" style="width: 70px;" required> <br><br>
+
+                    <label for="freqMin"> Ignorer tous les mots dont la freqence totale est inferieure à : </label>
+                    <input type="number" name="freqMin" id="freqMin" min="0" value="2" style="width: 70px;" required> <br><br>
+
+                    <label for="epochs"> Nombre d'itérations (epochs) sur le corpus: </label>
+                    <input type="number" name="epochs" id="epochs" min="0" value="40" style="width: 70px;" required> <br><br>
+                </fieldset>
+               <br>
+               <hr>
+                <input type="submit" class="btn btn-outline-primary" value="Lancer la classification">
+                <hr>
+            </form>
+
+            <table class="table" style="width: 70vw;margin: auto; text-align: center;">
+              <thead>
+                <tr>
+                  <th scope="col" style="width:150px">ID Message</th>
+                  <th scope="col">Thématique NV1</th>
+                  <th scope="col">Thématique NV2 </th>
+                  <th scope="col">Thématique NV3 </th>
+
+                </tr>
+              </thead>
+              <tbody id="resultat">
+                  {{resultat}}
+              </tbody>
+             
+            </table>
+          
+     </main>
+</body>
+
+</html>

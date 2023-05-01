@@ -8,13 +8,18 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 def extract_file(zip_file_path):
-    extract_to_path = 'data'  
+    extract_to_path = os.path.dirname(zip_file_path) 
+
+    
     if zipfile.is_zipfile(zip_file_path):
         with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+            print('Extracting files to: ', extract_to_path)
+            # zip_ref.printdir()  # Afficher la liste des fichiers dans le fichier zip
             zip_ref.extractall(extract_to_path)  
         return True
     else:
         return False
+
 
 def delete_content(directory):
     if os.path.exists(directory):

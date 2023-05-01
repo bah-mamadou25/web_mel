@@ -1,3 +1,15 @@
 **/_pycache__/
+**/*/_pycache__/
+**/*/*/_pycache__/
+
 word2vec_models/
 env/
+
+**/*.csv
+**/*/*.csv
+**/*/*/.csv
+**/*/*/*/.csv
+**/*/*/*/*/.csv
+
+
+**/workspaces/*/data/*
