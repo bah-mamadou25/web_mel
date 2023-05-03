@@ -86,8 +86,23 @@ def en(request):
     
 def validationEn(request):
     table_personnes=''
-    table_personnes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/pers.csv')
+    if request.FILES.get('EntiteNV'):
+         print('continuer validation')
+         fichier = request.FILES['EntiteNV']
+         fs = FileSystemStorage()
+         fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)
+         table_personnes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'data/'+fichier.name)
+         os.remove(project_params.workspace_path(request)+'data/'+fichier.name,)
+    else:
+        if request.POST.get('entite'):
+            table_personnes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/pers.csv')
+        else:
+            table_personnes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/org.csv')
+            
+        
     return render(request,'pel_mel/validationen.html',context={'table_personnes':mark_safe(table_personnes)})
+
+
 
 
 

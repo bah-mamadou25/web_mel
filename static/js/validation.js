@@ -21,10 +21,11 @@
     console.log(selec);
     for (var i of selec)
     {
-        console.log(i.innerHTML);
         listvalid.push(i.innerHTML);
-        var tr=i.parentNode;
-        tr.parentNode.removeChild(tr);
+       
+    }
+    while (selec.length > 0) {
+        selec[0].parentNode.parentNode.removeChild(selec[0].parentNode);
     }
     
     console.log(listvalid);
@@ -36,8 +37,9 @@
     for (var i of cellulesSup)
     {
         listsup.push(i.innerHTML);
-        var tr=i.parentNode;
-        tr.parentNode.removeChild(tr);
+    }
+    while (cellulesSup.length > 0) {
+        cellulesSup[0].parentNode.parentNode.removeChild(cellulesSup[0].parentNode);
     }
     
     console.log(listsup);
@@ -67,6 +69,15 @@ function downloadCSV(csv, filename) {
   Telecharger_valider.addEventListener('click',function(){
     chaineCsv=convertToCSV(listvalid);
     downloadCSV(chaineCsv,'entiter.csv');
+  },false);
+
+  var Telecharger_Nvalider= document.getElementById('TNvalider');
+  Telecharger_Nvalider.addEventListener('click',function(){
+    for(var i of cellules)
+        valAtt.push(i.innerHTML);
+    chaineCsv=convertToCSV(valAtt);
+    console.log(valAtt);
+    downloadCSV(chaineCsv,'enAttenteDeValidation.csv');
   },false);
 
   
