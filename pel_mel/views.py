@@ -84,6 +84,10 @@ def en(request):
             
     return render(request,'pel_mel/en.html',{'table_personnes': mark_safe(table_personnes), 'table_organisations': mark_safe(table_organisations),})
     
+def validationEn(request):
+    table_personnes=''
+    table_personnes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/pers.csv')
+    return render(request,'pel_mel/validationen.html',context={'table_personnes':mark_safe(table_personnes)})
 
 
 

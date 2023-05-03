@@ -178,7 +178,7 @@ def csv_to_html_table(csv_path):
         for i, row in enumerate(reader):
             html_table += "<tr><td>{}</td>".format(i+1)
             for data in row:
-                html_table += "<td>{}</td>".format(data)
+                html_table += '<td class="validation">{}</td>'.format(data)
             html_table += "</tr>\n"
 
     return html_table
