@@ -8,10 +8,14 @@
     {
         i.addEventListener('click',function(e){ 
             console.log('un click');
-            if(this.classList.contains("selectionne"))
+            if(this.classList.contains("selectionne")){
                 this.classList.remove("selectionne");
-            else
+                this.parentNode.style.backgroundColor="#ffffff"
+            }
+            else{
                 this.classList.add("selectionne");
+                this.parentNode.style.backgroundColor="#007bff"
+            }
         },false);
     }
     var valider= document.getElementById('valider');
@@ -68,7 +72,7 @@ function downloadCSV(csv, filename) {
   var Telecharger_valider= document.getElementById('Tvalider');
   Telecharger_valider.addEventListener('click',function(){
     chaineCsv=convertToCSV(listvalid);
-    downloadCSV(chaineCsv,'entiter.csv');
+    downloadCSV(chaineCsv,'entities.csv');
   },false);
 
   var Telecharger_Nvalider= document.getElementById('TNvalider');
