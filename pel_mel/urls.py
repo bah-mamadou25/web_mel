@@ -17,5 +17,6 @@ urlpatterns = [
     path("useTermesAPI/",views.useTermesAPI,name="useTermesAPI"),
     path("thematiqueAPI/",views.thematiqueAPI,name="thematiqueAPI"),
     path("doc2vec/",views.doc2vec,name="doc2vec"),
+     path("validationen/",views.validationEn, name="validationen")
     
 ]
