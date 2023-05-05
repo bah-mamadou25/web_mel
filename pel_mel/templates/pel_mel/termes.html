@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/en.css' %}">
     <script src="{% static 'js/jquery-3.6.4.min.js' %}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'js/tools.js' %}" defer></script>
+    <script src="{% static 'js/drawGrph.js' %}" defer></script>
     <script src="{% static 'js/en.js' %}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" defer></script>
     <title>pel_mel</title>
@@ -21,15 +23,7 @@
   <nav class="navbar sticky-top bg-body-tertiary" style="background-color: #e8ebde;">
     <div class="container-sm">
       <div class="dropdown  me-2">         
-        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="margin: 10px; width:15vw ">
-           Fichier
-          </button>            
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item "  href="" >Ouvrir une liste de termes existante</a></li>
-            <li><a class="dropdown-item" href="" >Valider une liste de termes </a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Fusionner plusieurs listes de termes</a></li>
-        </ul>
+        <a class="navbar-brand btn btn-sm btn-outline-secondary"data-bs-toggle="modal" data-bs-target="#traitementModal" href="" >valider une liste de termes </a>
      </div>
 
   <button class="btn btn btn-outline-info" type="button" style="margin: 10px; width:15vw " >Aide ?</button>
@@ -62,7 +56,7 @@
               </select>
               <br><br>
               <label for="min">Nombre min de mots dans un terme : </label>
-              <input type="number" name="min" id="min" min="1" value="1" style="width: 70px;" required> <br><br>
+              <input type="number" name="min" id="min" min="1" value="2" style="width: 70px;" required> <br><br>
               <label for="min">Nombre max de mots dans un terme : </label>
               <input type="number" name="max" id="max" min="1" value="4" style="width: 70px;" required>
               <br><br>
@@ -72,21 +66,20 @@
     </form>
     <hr>
     <div style="width: 100vw; text-align: center;">
-        <a href="#" class="btn btn-primary disabled" role="button" data-bs-toggle="button">valider</a> <br>
+        <a href="{% url 'validationTermes' %}"  class="btn btn-primary "  id="valideButton">valider</a> <br>
+        <div >
+          <canvas id="myChart" style="margin: auto;"></canvas>
+        </div>
+     
         <label for=""> Trier par ordre : &nbsp; &nbsp; </label>
-        <div class="form-check" style="display: inline-block;">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-            <label class="form-check-label" for="flexRadioDefault1">
-              Décroissant des scores &nbsp; &nbsp;
-            </label>
-          </div>
           <div class="form-check" style="display: inline-block;">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked disabled>
             <label class="form-check-label" for="flexRadioDefault2">
               Alphabétique des termes
             </label>
           </div>
     </div>
+    <div id="data">
     <table class="table" style="width: 70vw;margin: auto; text-align: center;">
         <thead>
           <tr>
@@ -101,7 +94,12 @@
         </tbody>
        
       </table>
+    </div>
+ 
+
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
 
 </html>

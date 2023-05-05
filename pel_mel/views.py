@@ -4,7 +4,7 @@ from django.core.files.storage import FileSystemStorage
 from django.utils.safestring import mark_safe
 from django.http import JsonResponse
 from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns,tool_word2vec,project_params,tool_doc2vec
-import time,os
+import time,os,csv
 from .models import User
 
 # Create your views here.
@@ -261,7 +261,9 @@ def doc2vec(request):
     return render(request,'pel_mel/doc2vec.html',{'resultat': mark_safe(resultat)})
 
 
-
+def validationTermes(request):
+    termesA=tool_ENs.csv_to_html_table( project_params.workspace_path(request)+'workspace/termes/termes.csv')
+    return render(request,'pel_mel/validationTermes.html',{'termesA' : mark_safe(termesA)})
 
 ############################### API RESPONSE 
 
@@ -315,9 +317,11 @@ def termesAPI(request):
         
         if os.path.exists(project_params.workspace_path(request)+"data/bulky"):
             tool_ENs.fusion_files(project_params.workspace_path(request)+"workspace/termes","termes.csv",
-                                  project_params.workspace_path(request)+"workspace/termes/termes.csv")            
-
-        termes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/termes/termes.csv') 
+                                  project_params.workspace_path(request)+"workspace/termes/termes.csv") 
+                 
+        termes_path=project_params.workspace_path(request)+'workspace/termes/termes.csv'
+        tool_termes.remove_duplicates_and_replace_file(termes_path)
+        termes=tool_ENs.csv_to_html_table(termes_path) 
         data = {
             'termes': termes
         } 
@@ -351,11 +355,16 @@ def relationsAPI(request):
         print(table_relations)
      return JsonResponse(data)
 
+def termescsv(request):
+    file=project_params.workspace_path(request)+'/workspace/termes/termes.csv'
+    data=[]
+    with open(file, newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';', quotechar='"')
+        for row in reader:
+            if len(row) > 1:
+                data.append(row[1])
 
-
-
-
-
+    return JsonResponse(data, safe=False)
 
 
 def trainAPI(request):

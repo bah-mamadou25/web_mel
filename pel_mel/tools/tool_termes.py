@@ -1,4 +1,4 @@
-import os
+import os,csv
 import subprocess
 
 import spacy
@@ -109,3 +109,30 @@ def split_list_of_phrases(corpus_path, STEM, METODE_SCORING, LONGUEURMIN, LONGUE
         print(file_name)
         # Exécution de la fonction sur chaque nom de fichier
         terms_extraction(dir+'/bulky/'+file_name, parent_dir+'/workspace/termes/'+file_name+'_termes.csv', STEM, METODE_SCORING, LONGUEURMIN, LONGUEURMAX)
+        
+        
+def remove_duplicates_and_replace_file(filepath):
+    """
+    Cette fonction supprime les doublons dans un fichier CSV en calculant la moyenne
+    des valeurs du deuxième champ pour les doublons et remplace le fichier traité
+    par le fichier nettoyé.
+    :param filepath: Le chemin complet vers le fichier CSV à traiter
+    """
+    data = {}
+    with open(filepath, 'r') as file:
+        reader = csv.reader(file, delimiter=';')
+        for row in reader:
+            key = row[0]
+            value = float(row[1])
+            if key in data:
+                data[key][0] += value
+                data[key][1] += 1
+            else:
+                data[key] = [value, 1]
+
+    with open(filepath, 'w', newline='') as file:
+        writer = csv.writer(file, delimiter=';')
+        for key, value in data.items():
+            writer.writerow([key, round(value[0] / value[1], 2), "-"])
+
+    print("Fichier nettoyé : " + filepath)
