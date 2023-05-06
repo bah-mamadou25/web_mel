@@ -1,21 +1,24 @@
+
+// icone svg
 var svgValid='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check2-circle" viewBox="0 0 16 16"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/><path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/></svg>';
 var svgSup='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-square" viewBox="0 0 16 16"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>';
-var svgRestaure='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-reply-fill" viewBox="0 0 16 16"><path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/></svg>'
+var svgRest='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-reply-fill" viewBox="0 0 16 16"><path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/></svg>'
 
-
+//tbody des tableau
 const tableA = document.querySelector('#attente tbody');
 const tableV = document.querySelector('#valider tbody');
 const tableS = document.querySelector('#supprimer tbody');
 
 
-
+//ajout icone
 ajoutActions("attente",svgSup,svgValid);
-ajoutActions("supprimer",svgRestaure,"");
+ajoutActions("supprimer",svgRest,"");
 
 
 
 S=document.querySelectorAll("#attente tbody td:nth-child(5) svg");
 V=document.querySelectorAll("#attente tbody td:last-child svg");
+R=document.querySelectorAll("#valider tbody td:last-child svg, #supprimer tbody td:last-child svg ");
 
 $(document).ready(function() {
     // Afficher la div "attente" et masquer les autres divs au chargement de la page
@@ -44,56 +47,91 @@ $(document).ready(function() {
   });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-S.forEach((e)=>{
-    e.style.cursor="pointer" 
-    e.addEventListener("click",(event)=>{
-       
-
-    var row = event.target.parentNode.parentNode;
-    if (row.tagName != 'TR') {
+var supEvent = function (event) {
+  var row = event.target.parentNode.parentNode;
+  if (row.tagName != 'TR') {
     // si propagation sur la balise path interieur de celle de svg
-    row=row.parentNode
-    }
+    row = row.parentNode;
+  }
 
-    row.parentNode.removeChild(row)
-    toadd=getFirstTDsContent(row,4)
-    toappend=createTableRowWithHTMLString(toadd,svgRestaure)
-    tableS.append(toappend)
-    
-})
-})
+  row.parentNode.removeChild(row);
+  toadd = getFirstTDsContent(row, 4);
+  toappend = createTableRowWithHTMLString(toadd, svgRest);
+  console.log(toappend.querySelector('td:last-child svg'));
+  tableS.append(toappend);
 
+  var deleteIcon = toappend.querySelector('td:last-child svg');
+  deleteIcon.style.cursor = 'pointer';
+
+  deleteIcon.addEventListener('click', function (el) {
+    RestaureTerme(el);
+  });
+};
+
+var validEvent = function(event) {
+  var row = event.target.parentNode.parentNode;
+  if (row.tagName != 'TR') {
+    // si propagation sur la balise path intérieur de celle de svg
+    row = row.parentNode;
+  }
+
+  row.parentNode.removeChild(row);
+  var toadd = getFirstTDsContent(row, 4);
+  var toappend = createTableRowWithHTMLString(toadd, svgRest);
+  tableV.append(toappend);
+
+  var validIcon = document.querySelector('#valider tr:last-child td:last-child svg');
+  validIcon.style.cursor = 'pointer';
+
+  validIcon.addEventListener('click', function(el) {
+    RestaureTerme(el);
+  });
+};
+
+
+
+
+// Gestion event si nous cliquons sur l'icone supprimer
+S.forEach(function (e) {
+  e.style.cursor = 'pointer';
+  e.addEventListener('click', supEvent);
+});
+
+// gestion event si nous clickons sur l'icone valider
 V.forEach((e)=>{
-    e.style.cursor="pointer"
-    e.addEventListener("click",(event)=>{
-       
+    e.style.cursor='pointer'
+    e.addEventListener('click',validEvent);
 
-     var row = event.target.parentNode.parentNode;
-     if (row.tagName != 'TR') {
-       // si propagation sur la balise path in terieur de celle de svg
-       row=row.parentNode
-     }
-
-     row.parentNode.removeChild(row)
-     toadd=getFirstTDsContent(row,4)
-     toappend=createTableRowWithHTMLString(toadd,svgRestaure)
-     tableV.append(toappend)
-    })
 })
+
+
+
+// gestion event si nous clickons sur l'icone restaurer
+
+R.forEach((e)=>{
+  e.style.cursor="pointer"
+  e.addEventListener("click",(event)=>{
+     
+
+   var row = event.target.parentNode.parentNode;
+   if (row.tagName != 'TR') {
+     // si propagation sur la balise path in terieur de celle de svg
+     row=row.parentNode
+   }
+
+   row.parentNode.removeChild(row)
+   toadd=getFirstTDsContent(row,4)
+   toappend=createTableRowWithHTMLString(toadd,svgRestaure)
+   tableV.append(toappend)
+  })
+})
+
+
+
+
+
+
+
 
 
 
@@ -112,11 +150,50 @@ for (var i = 0; i < tableBody.rows.length; i++) {
     newCell2.innerHTML = contentTd2
     tableBody.rows[i].appendChild(newCell2);
   }
-  
-  
-  
+   
   
 }
+}
+
+/**
+ * Construit un élément <tr> contenant des <td> avec le contenu du terme,
+ * ainsi que deux autres <td> avec les contenus spécifiés.
+ * @param {Array} terme - Les données du terme à afficher dans les <td> du <tr>.
+ * @param {string} contentTd1 - Le contenu du premier <td> à ajouter.
+ * @param {string} contentTd2 - Le contenu du deuxième <td> à ajouter.
+ * @returns {HTMLElement} - L'élément <tr> créé.
+ */
+function ajoutActionToRestaureTerme(terme, contentTd1, contentTd2) {
+  // Création de l'élément <tr>
+  var tr = document.createElement('tr');
+
+  // Boucle sur les données du terme pour créer les <td>
+  terme.forEach(function (data) {
+    // Création d'un <td> pour chaque donnée du terme
+    var td = document.createElement('td');
+    td.textContent = data;
+    tr.appendChild(td); // Ajout du <td> au <tr>
+  });
+
+  // Création du premier <td> supplémentaire
+  var td1 = document.createElement('td');
+  td1.innerHTML = contentTd1;
+  tr.appendChild(td1); // Ajout du premier <td> supplémentaire au <tr>
+  tr.querySelector('td:last-child svg').style.cursor="pointer";
+  tr.querySelector('td:last-child svg').addEventListener('click',supEvent)
+
+
+
+
+
+  
+  // Création du deuxième <td> supplémentaire
+  var td2 = document.createElement('td');
+  td2.innerHTML = contentTd2;
+  tr.appendChild(td2); // Ajout du deuxième <td> supplémentaire au <tr>
+  tr.querySelector('td:last-child svg').style.cursor="pointer";
+  tr.querySelector('td:last-child svg').addEventListener('click',validEvent)
+  return tr;
 }
 
  
@@ -162,4 +239,23 @@ function getFirstTDsContent(tr, i) {
     }
   
     return content;
+}
+
+
+function RestaureTerme(event) {
+
+  var toRestaure = event.target.parentNode.parentNode;
+  if (toRestaure.tagName != 'TR') {
+    // si propagation sur la balise path interieur de celle de svg
+    toRestaure=toRestaure.parentNode
+  }
+  toRestaure.parentNode.removeChild(toRestaure)
+
+  var termeContent=getFirstTDsContent(toRestaure,4)
+
+
+  toRestaure=ajoutActionToRestaureTerme(termeContent,svgSup,svgValid)
+
+  tableA.insertAdjacentElement('afterbegin',toRestaure)
+
 }
