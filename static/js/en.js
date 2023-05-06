@@ -73,3 +73,14 @@ $('#my-form').on('submit', function (event) {
     });
 
 
+
+
+// Affichage des nouveaux éléments si termes extraits
+if(document.querySelector('#termes').outerHTML===""){
+    $('#graphique').hide()
+    $('#termes').on('change', function() {
+        $('#valideButton').removeClass('disabled')
+        $('#intervalleButton').removeClass('disabled')
+        $('#graphique').show()
+    });
+}
