@@ -11,7 +11,7 @@ import numpy as np
 import xml.etree.ElementTree as ET
 from .tool_load_file import *
 from django.utils.html import escape
-
+from django.urls import reverse
 
 def prepare_themes_for_doc2vec(corpus_path,themes_by_level_list, messages_directory_path):
     prepare_thematique_for_doc2vec(corpus_path,themes_by_level_list, messages_directory_path)
@@ -66,6 +66,10 @@ def read_thematique(thematiques_path):
         thematique_list.append(str(them).strip())
     return thematique_list
 
+
+#Afin de les utiliser dans views.py pour generer les fichiers
+folder = []
+text = []
 def messages_presse_classification(folder_path, thematique_path, thematiques_1_level_path, thematiques_2_level_path,
                                    thematiques_3_level_path, vector_size, min_count, epochs, output_result_path):
     # lire les thématiques
@@ -80,10 +84,9 @@ def messages_presse_classification(folder_path, thematique_path, thematiques_1_l
     thematique_list.append(thematique_3_list)
 
     message = []
-    folder = []
     originatingId = []
     title = []
-    text = []
+    
 
     # Récupérer le contenu textuel (balise TextContent)
     for rootdir, dirs, files in os.walk(folder_path):
@@ -108,6 +111,13 @@ def messages_presse_classification(folder_path, thematique_path, thematiques_1_l
                     for Oid in root.findall('OriginatingSystemId'):
                         originatingId.append(re.sub('<>', '', Oid.text))
                     message.append([rootdir, re.sub('<>', '', root.find('OriginatingSystemId').text), title_by_file, text_by_file, root.find("SentDate").text])
+                    
+                    for t in text :
+                        print(t)
+                        print("\n******************\n")
+                    
+                    print(len(text))
+                    print(len(folder))
 
     # Créer le data frame
     message_pd = pd.DataFrame(message, columns=["Dossier", "Id", "Titre", "Corps", "DateEnvoi"])
@@ -173,21 +183,12 @@ def messages_presse_classification(folder_path, thematique_path, thematiques_1_l
                 sims = d2v.docvecs.most_similar([inferred_vector_th], topn=len(d2v.docvecs))
                 rank = pd.DataFrame([[a, b] for a, b in sims]).sort_values(0)[1].values
                 ranks.append(rank)
-                print('--------------------')
-                print(rank)
-                print('--------------------')
-                
                 col.append(th)
-                print('********************')
-                print(th)
-                print('*********************')
+
                 
     
 
         if len(ranks) > 0:
-            print('+++++++++++++++++++')        
-            print(ranks)
-            print('+++++++++++++++++++')    
             df_res_them = pd.DataFrame(np.transpose(ranks), columns=col)
             message_pd["labels_niveau"+str(niveau+1)] = df_res_them.idxmax(axis=1)
 
@@ -232,6 +233,33 @@ def csv_no_header_to_html_table(csv_path):
             html_table += "<tr>"
             for data in row:
                 html_table += "<td>'{}'</td>".format(escape(data))
+            if len(row) == 3:
+                html_table += "<td></td>" # revoir pourquoi bug pour niveau 3
+            url = reverse('voirdoc') + '?id=' + str(i+1)
+            html_table += '<td><a href="{}">voir</a></td>'.format(url)
             html_table += "</tr>\n"
 
     return html_table
+
+
+
+
+def create_files_from_source(lst_txt, lst_folder, directory_path):
+    """
+    Crée des fichiers texte à partir d'une liste de texte, en ajoutant une ligne de répertoire au début de chaque fichier.
+
+    Args:
+        lst_txt (list): Liste de texte à écrire dans les fichiers.
+        lst_folder (list): Liste de noms de répertoires correspondant à chaque élément de texte.
+        directory_path (str): Chemin d'accès au répertoire dans lequel les fichiers doivent être créés.
+
+    Returns:
+        None
+    """
+    for index, element in enumerate(lst_txt, start=0):
+        file_path = os.path.join(directory_path, f'{index+1}.txt')
+        content = "## REPERTOIRE : {} ## \n{}".format(lst_folder[index].split('data/')[1], element)
+        with open(file_path, 'w') as file:
+            file.write(content)
+
+        print(f'Le fichier {file_path} a été créé avec succès.')

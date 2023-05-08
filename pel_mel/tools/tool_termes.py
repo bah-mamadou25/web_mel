@@ -1,6 +1,5 @@
 import os,csv
 import subprocess
-
 import spacy
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -136,3 +135,17 @@ def remove_duplicates_and_replace_file(filepath):
             writer.writerow([key, round(value[0] / value[1], 2), "-"])
 
     print("Fichier nettoyé : " + filepath)
+    
+    
+def csv_to_json(csv_file_path):
+    # Lecture du fichier CSV
+    with open(csv_file_path, 'r') as csv_file:
+        csv_data = csv.reader(csv_file)
+
+        # Conversion du contenu CSV en format JSON
+        json_data = []
+        for line_number, row in enumerate(csv_data, start=1):
+            json_data.append({str(line_number): row})
+    print(json_data)
+    # Renvoi de la réponse JSON
+    return json_data

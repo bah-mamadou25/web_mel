@@ -19,6 +19,9 @@ urlpatterns = [
     path("doc2vec/",views.doc2vec,name="doc2vec"),
     path("validationen/",views.validationEn, name="validationen"),
     path("termescsv/",views.termescsv, name="termescsv"),
-    path("validationTermes/",views.validationTermes, name="validationTermes")
+    path("validationTermes/",views.validationTermes, name="validationTermes"), 
+    path("validationIntervalleTermesAPI/",views.validationIntervalleTermesAPI, name="validationIntervalleTermesAPI"), 
+    path("voirdoc",views.voirdoc, name="voirdoc"),
+    
     
 ]

@@ -14,6 +14,8 @@
     <script src="{% static 'js/drawGrph.js' %}" defer></script>
     <script src="{% static 'js/tools.js' %}" defer></script>
     <script src="{% static 'js/en.js' %}" defer></script>
+    <script src="{% static 'js/validationIntervalleScore.js' %}" defer></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" defer></script>
     <title>pel_mel</title>
 
@@ -68,7 +70,7 @@
     <hr>
     <div style="width: 100vw; text-align: center;">
         <a href="{% url 'validationTermes' %}"  class="btn btn-primary disabled"  id="valideButton">valider</a> 
-        <button class="btn btn-success disabled" id="intervalleButton">valider par intervalle score</button>
+        <button type="button" class="btn btn-success " id="intervalleButton">valider par intervalle de score</button>
         <br>
       <div id="graphique">
           <canvas id="myChart" style="margin: auto;"></canvas>
@@ -92,9 +94,7 @@
             <th scope="col">Source</th>
           </tr>
         </thead>
-        <tbody id="termes">
-
-        </tbody>
+        <tbody id="termes"></tbody>
        
       </table>
     </div>

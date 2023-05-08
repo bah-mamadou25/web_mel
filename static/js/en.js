@@ -76,7 +76,7 @@ $('#my-form').on('submit', function (event) {
 
 
 // Affichage des nouveaux éléments si termes extraits
-if(document.querySelector('#termes').outerHTML===""){
+if(document.querySelector('#termes').innerHTML.replace(/\s/g, "")===""){
     $('#graphique').hide()
     $('#termes').on('change', function() {
         $('#valideButton').removeClass('disabled')
@@ -84,3 +84,4 @@ if(document.querySelector('#termes').outerHTML===""){
         $('#graphique').show()
     });
 }
+

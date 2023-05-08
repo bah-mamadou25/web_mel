@@ -1,4 +1,35 @@
 
+
+
+function filterJsonByScore(jsonData, minScore, maxScore) {
+  // Convertir la chaîne JSON en objet JavaScript
+  const data = JSON.parse(jsonData);
+
+  // Filtrer les éléments en fonction du score
+  const filteredData = Object.entries(data).filter(([key, value]) => {
+    const score = parseFloat(value[0].split(';')[1]);
+    return score >= minScore && score <= maxScore;
+  });
+
+  // Convertir les éléments filtrés en objet JavaScript
+  const filteredJson = Object.fromEntries(filteredData);
+
+  // Retourner les éléments filtrés en format JSON
+  return JSON.stringify(filteredJson);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 // icone svg
 var svgValid='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check2-circle" viewBox="0 0 16 16"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/><path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/></svg>';
 var svgSup='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-square" viewBox="0 0 16 16"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>';
@@ -259,3 +290,4 @@ function RestaureTerme(event) {
   tableA.insertAdjacentElement('afterbegin',toRestaure)
 
 }
+

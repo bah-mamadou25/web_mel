@@ -258,6 +258,8 @@ def doc2vec(request):
             
             resultat=tool_doc2vec.csv_no_header_to_html_table(project_params.workspace_path(request)+'workspace/doc2vec/resultat.csv')
             
+            tool_doc2vec.create_files_from_source(tool_doc2vec.text,tool_doc2vec.folder,project_params.workspace_path(request)+'workspace/doc2vec/')
+            
     return render(request,'pel_mel/doc2vec.html',{'resultat': mark_safe(resultat)})
 
 
@@ -428,3 +430,24 @@ def thematiqueAPI(request):
     } 
       
     return JsonResponse(data)
+
+
+def validationIntervalleTermesAPI(request):
+    json_data=tool_termes.csv_to_json( project_params.workspace_path(request)+'workspace/termes/termes.csv')
+    return JsonResponse(json_data, safe=False, json_dumps_params={'ensure_ascii': False})
+
+def voirdoc(request):
+    file_path= project_params.workspace_path(request)+'workspace/doc2vec/'+request.GET.get('id')+'.txt'
+    print(file_path)
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+            response_data = {
+                'content': content
+            }
+            return JsonResponse(response_data)
+    except FileNotFoundError:
+        response_data = {
+            'error': f'Le fichier {file_path} est introuvable.'
+        }
+        return JsonResponse(response_data, status=404)
