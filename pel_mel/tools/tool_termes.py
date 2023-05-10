@@ -132,7 +132,7 @@ def remove_duplicates_and_replace_file(filepath):
     with open(filepath, 'w', newline='') as file:
         writer = csv.writer(file, delimiter=';')
         for key, value in data.items():
-            writer.writerow([key, round(value[0] / value[1], 2), "-"])
+            writer.writerow([key, round(value[0] / value[1], 4), "-"])
 
     print("Fichier nettoyé : " + filepath)
     
@@ -149,3 +149,31 @@ def csv_to_json(csv_file_path):
     print(json_data)
     # Renvoi de la réponse JSON
     return json_data
+
+
+def filter_from_csv_termes(input_file_path, reference_file_path, output_file_path):
+    print(input_file_path)
+    print(reference_file_path)
+    print(output_file_path)
+    
+    
+    # Ensemble pour stocker les valeurs du premier champ du premier fichier
+    first_field_values = set()
+
+    # Lire le premier fichier CSV et collecter les valeurs du premier champ
+    with open(input_file_path, 'r', newline='') as input_file:
+        reader = csv.reader(input_file)
+        for row in reader:
+            if row:  # Vérifier si la ligne n'est pas vide
+                first_field_values.add(row[0])
+                
+    
+    # Lire le deuxième fichier CSV, filtrer les lignes selon les valeurs du premier champ,
+    # et écrire les lignes correspondantes dans le troisième fichier
+    with open(reference_file_path, 'w+', newline='') as reference_file, open(output_file_path, 'w+', newline='') as output_file:
+        reader = csv.reader(reference_file)
+        writer = csv.writer(output_file)
+        for row in reader:
+            print(row[0])
+            if row and row[0] in first_field_values:
+                writer.writerow(row)

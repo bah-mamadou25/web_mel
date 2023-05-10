@@ -1,6 +1,5 @@
-**/_pycache__/
-**/*/_pycache__/
-**/*/*/_pycache__/
+__pycache__
+
 
 word2vec_models/
 env/

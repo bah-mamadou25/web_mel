@@ -43,17 +43,17 @@ def accueil(request):
             return tool_load_file.download_corpus(project_params.workspace_path(request)+"workspace/corpus.txt")
         
         elif request.FILES.get('corpus'):
-
+            tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/fichierZip')
             fichier = request.FILES['corpus']
             fs = FileSystemStorage()
             fs.save(project_params.workspace_path(request)+'data/'+fichier.name, fichier)
            
-            tool_load_file.cleanUpCorpus(project_params.workspace_path(request)+'data/'+fichier.name,project_params.workspace_path(request)+'workspace/cleaned_'+fichier.name)
+            tool_load_file.cleanUpCorpus(project_params.workspace_path(request)+'data/'+fichier.name,project_params.workspace_path(request)+'workspace/fichierZip/cleaned_'+fichier.name)
             if 'toSplit' in request.POST:
-                tool_load_file.retrieveSentences(project_params.workspace_path(request)+'workspace/cleaned_'+fichier.name)
-                return tool_load_file.download_directory_as_zip(project_params.workspace_path(request)+'workspace')
+                tool_load_file.retrieveSentences(project_params.workspace_path(request)+'workspace/fichierZip/cleaned_'+fichier.name)
+                return tool_load_file.download_directory_as_zip(project_params.workspace_path(request)+'workspace/fichierZip')
             else:
-                return tool_load_file.download_corpus(project_params.workspace_path(request)+'workspace/cleaned_'+fichier.name)
+                return tool_load_file.download_corpus(project_params.workspace_path(request)+'workspace/fichierZip/cleaned_'+fichier.name)
 
     return render(request,'pel_mel/index.html',{})
 
@@ -108,8 +108,9 @@ def validationEn(request):
 
 
 def termes(request):
-     termes=''
-     if request.FILES.get('corpus'):      
+    termes=''
+    
+    if request.FILES.get('corpus'):      
         tool_ENs.create_dir(project_params.workspace_path(request)+'data')
         tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/termes')
         fichier = request.FILES['corpus']
@@ -129,8 +130,22 @@ def termes(request):
                                   project_params.workspace_path(request)+"workspace/termes/termes.csv")            
 
         termes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/termes/termes.csv') 
-      
-     return render(request,'pel_mel/termes.html',{'termes':mark_safe(termes)})
+       
+    
+    elif request.FILES.get('listeTerme'): 
+        fichier = request.FILES['listeTerme']
+        fs = FileSystemStorage()
+        fs.save(project_params.workspace_path(request)+'data/'+'toRefer_'+fichier.name, fichier)  
+        tool_termes.filter_from_csv_termes(project_params.workspace_path(request)+'data/'+'toRefer_'+fichier.name,
+                                           project_params.workspace_path(request)+"workspace/termes/termes.csv",
+                                           project_params.workspace_path(request)+"workspace/termes/termes_via_list.csv")
+        return tool_load_file.download_corpus(project_params.workspace_path(request)+"workspace/termes/termes_via_list.csv")
+        
+    return render(request,'pel_mel/termes.html',context={'termes':mark_safe(termes)})
+     
+        
+        
+        
 
 
 
