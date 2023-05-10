@@ -17,7 +17,11 @@ urlpatterns = [
     path("useTermesAPI/",views.useTermesAPI,name="useTermesAPI"),
     path("thematiqueAPI/",views.thematiqueAPI,name="thematiqueAPI"),
     path("doc2vec/",views.doc2vec,name="doc2vec"),
+<<<<<<< HEAD
     path("validationen/",views.validationEn, name="validationen"),
+=======
+    path("validationEnOr/",views.validationEn, name="validationEnOr"),
+>>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
     path("termescsv/",views.termescsv, name="termescsv"),
     path("validationTermes/",views.validationTermes, name="validationTermes"), 
     path("validationIntervalleTermesAPI/",views.validationIntervalleTermesAPI, name="validationIntervalleTermesAPI"), 

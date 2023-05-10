@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 function drawGraphe(data) {
   const min = Math.min(...data);
   const max = Math.max(...data);
@@ -49,3 +50,4 @@ function drawGraphe(data) {
     }
   });
 }
+

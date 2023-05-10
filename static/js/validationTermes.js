@@ -28,7 +28,11 @@ function filterJsonByScore(jsonData, minScore, maxScore) {
 
 
 
+<<<<<<< HEAD
 
+=======
+var colDon=4;
+>>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
 
 // icone svg
 var svgValid='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check2-circle" viewBox="0 0 16 16"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/><path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/></svg>';
@@ -51,6 +55,7 @@ S=document.querySelectorAll("#attente tbody td:nth-child(5) svg");
 V=document.querySelectorAll("#attente tbody td:last-child svg");
 R=document.querySelectorAll("#valider tbody td:last-child svg, #supprimer tbody td:last-child svg ");
 
+<<<<<<< HEAD
 $(document).ready(function() {
     // Afficher la div "attente" et masquer les autres divs au chargement de la page
     $("#attente").show();
@@ -121,6 +126,8 @@ var validEvent = function(event) {
 
 
 
+=======
+>>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
 
 // Gestion event si nous cliquons sur l'icone supprimer
 S.forEach(function (e) {
@@ -136,6 +143,7 @@ V.forEach((e)=>{
 })
 
 
+<<<<<<< HEAD
 
 // gestion event si nous clickons sur l'icone restaurer
 
@@ -291,3 +299,5 @@ function RestaureTerme(event) {
 
 }
 
+=======
+>>>>>>> f4740638c725dbf2958098ade5037a177479bbfa

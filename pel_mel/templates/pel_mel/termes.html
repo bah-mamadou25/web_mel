@@ -26,6 +26,10 @@
   <nav class="navbar sticky-top bg-body-tertiary" style="background-color: #e8ebde;">
     <div class="container-sm">
       <div class="dropdown  me-2">         
+<<<<<<< HEAD
+=======
+        <a class="navbar-brand btn btn-sm btn-outline-secondary"data-bs-toggle="modal" data-bs-target="#traitementModal" href="" >valider une liste de termes </a>
+>>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
      </div>
 
   <button class="btn btn btn-outline-info" type="button" style="margin: 10px; width:15vw " >Aide ?</button>
@@ -68,6 +72,7 @@
     </form>
     <hr>
     <div style="width: 100vw; text-align: center;">
+<<<<<<< HEAD
         <button type="button" class="btn btn-success " id="intervalleButton">valider par intervalle de score</button>
         <a href="{% url 'validationTermes' %}"  class="btn btn-primary disabled"  id="valideButton">valider</a> 
         <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#listeModal" id="listeButton">valider avec une liste de termes</button>
@@ -76,6 +81,13 @@
         <!-- graphe -->
       <div id="graphique">
           <canvas id="myChart" style="margin: auto; min-height : 300px; min-width: 500px;"></canvas>
+=======
+        <a href="{% url 'validationTermes' %}"  class="btn btn-primary disabled"  id="valideButton">valider</a> 
+        <button type="button" class="btn btn-success " id="intervalleButton">valider par intervalle de score</button>
+        <br>
+      <div id="graphique">
+          <canvas id="myChart" style="margin: auto;"></canvas>
+>>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
         </div>
      
         <label for=""> Trier par ordre : &nbsp; &nbsp; </label>
@@ -102,6 +114,7 @@
     </div>
  
 
+<<<<<<< HEAD
           <!-- choisir liste terme Modal -->
           <div class="modal fade" id="listeModal" tabindex="-1" aria-labelledby="listeModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -126,6 +139,8 @@
             </div>
           </div>
 
+=======
+>>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 

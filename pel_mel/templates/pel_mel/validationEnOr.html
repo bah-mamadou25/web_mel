@@ -9,28 +9,33 @@
     <link rel="stylesheet" href="{% static 'css/en.css' %}">
     <script src="{% static 'js/jquery-3.6.4.min.js' %}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" defer ></script>
-<<<<<<< HEAD
-    <script src="{% static 'js/validationTermes.js' %}" defer></script>
     <script src="{% static 'js/generefileTermes.js' %}" defer></script>
-=======
-    <script src="{% static 'js/generefileTermes.js' %}" defer></script>
-    <script src="{% static 'js/validationTermes.js' %}" defer></script>
-   
->>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
+    <script src="{% static 'js/validationE.js' %}" defer></script>
+    
 
 
     <title>pel_mel</title>
 
 </head>
 <body style="width: 100vw; text-align: center; ">
+</form>
+
     <nav class="navbar sticky-top bg-body-tertiary" style="background-color: #e8ebde;">
         <div class="container-sm">
           <button class="btn btn btn-outline-info" type="button" data-bs-toggle="modal" data-bs-target="#aideModal">Aide ?</button>
         </div>
       </nav>
       <br>
+      <form action="{% url 'validationEnOr' %}" method="post" enctype="multipart/form-data" style="margin-top: 5px;" id="fichierVal" >
+        <fieldset style="text-align: center;">
+            {% csrf_token %}
+            <input type="file" class="form-control-file" id="EnsValidation" name="EnsValidation" accept=".csv" >
+            <input type="submit" class="btn btn-outline-primary" id="validerF" value="Valider avec un fichier">
+        </fieldset>
+    </form>
+    <br>
       <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-        <button type="button" class="btn btn-warning toggle-print" id="buttonA" >Termes en attente de validation 
+        <button type="button" class="btn btn-warning toggle-print" id="buttonA" >Elements en attente de validation 
         <span class=" download-att btn btn-sm btn-outline-dark" >
           <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
             <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
@@ -41,7 +46,7 @@
 
 
         </button>
-        <button type="button" class="btn btn-success toggle-print " id="buttonV" >Termes validés
+        <button type="button" class="btn btn-success toggle-print " id="buttonV" >Elements validés
           <span class=" download-val btn btn-sm btn-outline-dark" >
             <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
               <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
@@ -50,7 +55,7 @@
           </span>
 
         </button>
-        <button type="button" class="btn btn-danger toggle-print " id="buttonS" >Termes supprimés
+        <button type="button" class="btn btn-danger toggle-print " id="buttonS" >Elements supprimés
 
           <span class=" download-sup btn btn-sm btn-outline-dark" >
             <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
@@ -64,34 +69,35 @@
       <br>
       <table class="table" id="attente" style="width:70vw;margin:auto">
         <thead>
-            <th scope="col" style="width:50px">Num</th>
-            <th scope="col">Terme</th>
-            <th scope="col">Score</th>
-            <th scope="col">Source</th>
+
+            <th style="width: 10px;">Num</th>
+            <th>Personnes</th>
             <th  scope="col">Supprimer</th>
             <th  scope="col" >Valider</th>
+
         </thead>
-        {{termesA}}
+        {{table_personnes}}
 
       </table>
       <table class="table" id="valider" style="width:70vw;margin:auto">
         <thead>
-            <th scope="col" style="width:50px">Num</th>
-            <th scope="col">Terme</th>
-            <th scope="col">Score</th>
-            <th scope="col">Source</th>
+
+            <th style="width: 10px;">Num</th>
+            <th>Personnes</th>
             <th  scope="col">Restaurer</th>
+
         </thead>
         <tbody class="termesV"></tbody>
         
       </table>
       <table class="table" id="supprimer" style="width:70vw;margin:auto">
         <thead>
-            <th scope="col" style="width:50px">Num</th>
-            <th scope="col">Terme</th>
-            <th scope="col">Score</th>
-            <th scope="col">Source</th>
+
+            <th style="width: 10px;">Num</th>
+            <th>Personnes</th>
             <th  scope="col">Restaurer</th>
+            
+
         </thead>
         <tbody class="termesS"></tbody>
       </table>

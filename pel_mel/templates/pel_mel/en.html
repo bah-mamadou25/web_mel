@@ -38,7 +38,7 @@
             <input type="submit" class="btn btn-outline-primary" value="Lancer la recherche des ENs">
         </fieldset>
     </form>
-    <form action="{% url 'validationen' %}" method="post" enctype="multipart/form-data" style="margin-top: 5px;" id="my-formVal" >
+    <form action="{% url 'validationEnOr' %}" method="post" enctype="multipart/form-data" style="margin-top: 5px;" id="my-formVal" >
         <fieldset style="text-align: center;">
             {% csrf_token %}
             <input type="file" class="form-control-file" id="EntiteNV" name="EntiteNV" accept=".csv" >
@@ -56,7 +56,7 @@
             <td style="text-align: center;">
                 <div class="btn-group" role="group" aria-label="Basic example">
                    <!-- <button type="button" class="btn btn-outline-secondary">Ouvrir</button>-->
-                   <form action="{% url 'validationen' %}" method="post" enctype="multipart/form-data">
+                   <form action="{% url 'validationEnOr' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}  
                </div>
              
@@ -68,7 +68,7 @@
             <td style="text-align: center;">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <!--<button type="button" class="btn btn-outline-secondary">Ouvrir</button>-->
-                    <form action="{% url 'validationen' %}" method="post" enctype="multipart/form-data">
+                    <form action="{% url 'validationEnOr' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}  
                    </div>
                      <input type="submit" class="btn btn-primary" value="valider" name="organisation" >
