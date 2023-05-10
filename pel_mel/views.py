@@ -4,7 +4,7 @@ from django.core.files.storage import FileSystemStorage
 from django.utils.safestring import mark_safe
 from django.http import JsonResponse
 from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns,tool_word2vec,project_params,tool_doc2vec
-import time,os
+import time,os,csv
 from .models import User
 
 # Create your views here.
@@ -100,7 +100,7 @@ def validationEn(request):
             table_personnes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/org.csv')
             
         
-    return render(request,'pel_mel/validationen.html',context={'table_personnes':mark_safe(table_personnes)})
+    return render(request,'pel_mel/validationEnOr.html',context={'table_personnes':mark_safe(table_personnes)})
 
 
 
@@ -258,10 +258,14 @@ def doc2vec(request):
             
             resultat=tool_doc2vec.csv_no_header_to_html_table(project_params.workspace_path(request)+'workspace/doc2vec/resultat.csv')
             
+            tool_doc2vec.create_files_from_source(tool_doc2vec.text,tool_doc2vec.folder,project_params.workspace_path(request)+'workspace/doc2vec/')
+            
     return render(request,'pel_mel/doc2vec.html',{'resultat': mark_safe(resultat)})
 
 
-
+def validationTermes(request):
+    termesA=tool_ENs.csv_to_html_table( project_params.workspace_path(request)+'workspace/termes/termes.csv')
+    return render(request,'pel_mel/validationTermes.html',{'termesA' : mark_safe(termesA)})
 
 ############################### API RESPONSE 
 
@@ -315,9 +319,11 @@ def termesAPI(request):
         
         if os.path.exists(project_params.workspace_path(request)+"data/bulky"):
             tool_ENs.fusion_files(project_params.workspace_path(request)+"workspace/termes","termes.csv",
-                                  project_params.workspace_path(request)+"workspace/termes/termes.csv")            
-
-        termes=tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/termes/termes.csv') 
+                                  project_params.workspace_path(request)+"workspace/termes/termes.csv") 
+                 
+        termes_path=project_params.workspace_path(request)+'workspace/termes/termes.csv'
+        tool_termes.remove_duplicates_and_replace_file(termes_path)
+        termes=tool_ENs.csv_to_html_table(termes_path) 
         data = {
             'termes': termes
         } 
@@ -351,11 +357,16 @@ def relationsAPI(request):
         print(table_relations)
      return JsonResponse(data)
 
+def termescsv(request):
+    file=project_params.workspace_path(request)+'/workspace/termes/termes.csv'
+    data=[]
+    with open(file, newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';', quotechar='"')
+        for row in reader:
+            if len(row) > 1:
+                data.append(row[1])
 
-
-
-
-
+    return JsonResponse(data, safe=False)
 
 
 def trainAPI(request):
@@ -419,3 +430,24 @@ def thematiqueAPI(request):
     } 
       
     return JsonResponse(data)
+
+
+def validationIntervalleTermesAPI(request):
+    json_data=tool_termes.csv_to_json( project_params.workspace_path(request)+'workspace/termes/termes.csv')
+    return JsonResponse(json_data, safe=False, json_dumps_params={'ensure_ascii': False})
+
+def voirdoc(request):
+    file_path= project_params.workspace_path(request)+'workspace/doc2vec/'+request.GET.get('id')+'.txt'
+    print(file_path)
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+            response_data = {
+                'content': content
+            }
+            return JsonResponse(response_data)
+    except FileNotFoundError:
+        response_data = {
+            'error': f'Le fichier {file_path} est introuvable.'
+        }
+        return JsonResponse(response_data, status=404)

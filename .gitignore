@@ -13,3 +13,5 @@ env/
 
 
 **/workspaces/*/data/*
+**/workspaces/*/workspace/doc2vec/*
+

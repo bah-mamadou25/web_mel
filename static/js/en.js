@@ -6,6 +6,7 @@
 * un message d'erreur.
 */
 
+
 $('#my-form').on('submit', function (event) {
     // Empêche la soumission normale du formulaire
     event.preventDefault();
@@ -33,8 +34,21 @@ $('#my-form').on('submit', function (event) {
                 $('#spinner-container').hide();
                 // Affiche les tables HTML renvoyées
                 
+                console.log("out")
                 if($('#termes').length){
                     $('#termes').html(data.termes)
+                    
+                    fetch('/termescsv/') 
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("in")
+                     drawGraphe(data)
+                    })
+                     .catch(error => {
+                     console.error(error);
+                     });
+                    document.querySelector('#valideButton').classList.remove('disabled')
+                   
                 }
                 else if ($('#table_relations').length){
                     $('#table_relations').html(data.table_relations);
@@ -57,4 +71,17 @@ $('#my-form').on('submit', function (event) {
             alert('La soumission du formulaire a été annulée.');
           }
     });
+
+
+
+
+// Affichage des nouveaux éléments si termes extraits
+if(document.querySelector('#termes').innerHTML.replace(/\s/g, "")===""){
+    $('#graphique').hide()
+    $('#termes').on('change', function() {
+        $('#valideButton').removeClass('disabled')
+        $('#intervalleButton').removeClass('disabled')
+        $('#graphique').show()
+    });
+}
 
