@@ -18,11 +18,6 @@ function convertTbodyToCSV(tbodyElement) {
       const columns = row.querySelectorAll('td');
       
       // Parcourir chaque colonne
-<<<<<<< HEAD
-      for (let i = 1; i < 4; i++) {
-        const columnData = columns[i].textContent.trim();
-        rowData.push(columnData);
-=======
       for (let i of columns) {
         if(!i.querySelector("svg")&& i!==columns[0])
         {
@@ -31,7 +26,6 @@ function convertTbodyToCSV(tbodyElement) {
 
         }
         
->>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
       }
       
       // Ajouter la ligne au tableau de données CSV
@@ -66,11 +60,7 @@ function convertTbodyToCSV(tbodyElement) {
    */
   $(".download-att").click(function() {
     downloadCSVFile(convertTbodyToCSV(document.querySelector('#attente tbody')),
-<<<<<<< HEAD
-                    'termes_attentes.csv');
-=======
                     'elements_attentes.csv');
->>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
   });
   
   /**
@@ -79,11 +69,7 @@ function convertTbodyToCSV(tbodyElement) {
    */
   $(".download-val").click(function() {
     downloadCSVFile(convertTbodyToCSV(document.querySelector('#valider tbody')),
-<<<<<<< HEAD
-                    'termes_validés.csv');
-=======
                     'elements_validés.csv');
->>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
   });
   
   /**
@@ -92,11 +78,6 @@ function convertTbodyToCSV(tbodyElement) {
    */
   $(".download-sup").click(function() {
     downloadCSVFile(convertTbodyToCSV(document.querySelector('#supprimer tbody')),
-<<<<<<< HEAD
-                    'termes_supprimés.csv');
-  });
-  
-=======
                     'elements_supprimés.csv');
   });
   
@@ -289,4 +270,3 @@ validIcon.addEventListener('click', function(el) {
   RestaureElement(el);
 });
 };
->>>>>>> f4740638c725dbf2958098ade5037a177479bbfa

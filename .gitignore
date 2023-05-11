@@ -14,3 +14,8 @@ env/
 **/workspaces/*/data/*
 **/workspaces/*/workspace/doc2vec/*
 
+**/*.txt
+**/*/*.txt
+**/*/*/.txt
+**/*/*/*/.txt
+**/*/*/*/*/.txt

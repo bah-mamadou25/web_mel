@@ -389,6 +389,7 @@ def trainAPI(request):
     if request.FILES.get('corpusTraite'):      
         tool_ENs.create_dir(project_params.workspace_path(request)+'data')
         tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/termes')
+        tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/word2vec')
         fichier = request.FILES['corpusTraite']
         
         fs = FileSystemStorage()
@@ -398,6 +399,7 @@ def trainAPI(request):
         entry_label_window=request.POST['fenetre']
         list_sentences=tool_word2vec.read_csv_file_to_list_sentences(project_params.workspace_path(request)+'data/'+fichier.name)
         termes = tool_word2vec.similar_terms_untrained_model(list_sentences, int(entry_label_vector_size), int(entry_label_window))
+        tool_word2vec.get_most_similar_word(termes,project_params.workspace_path(request)+'workspace/word2vec/termes_similaire.csv')
 
         data = {
             'termes':  tool_ENs.vec_to_html_table(termes)
@@ -464,5 +466,16 @@ def voirdoc(request):
     except FileNotFoundError:
         response_data = {
             'error': f'Le fichier {file_path} est introuvable.'
+        }
+        return JsonResponse(response_data, status=404)
+    
+
+def rechercheSimilariteAPI(request):
+    try:
+       response_data=tool_termes.csv_to_json(project_params.workspace_path(request)+'workspace/word2vec/termes_similaire.csv')    
+       return JsonResponse(response_data, safe=False, json_dumps_params={'ensure_ascii': False})
+    except FileNotFoundError:
+        response_data = {
+            'error': f'Lancer l\'apprentissage pour obtenir une liste de termes à annalyser.'
         }
         return JsonResponse(response_data, status=404)

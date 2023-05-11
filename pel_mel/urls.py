@@ -8,6 +8,7 @@ urlpatterns = [
     path("accueil/", views.accueil, name="accueil"),
     path("en/", views.en, name="en"),
     path("enapi/", views.enAPI, name="enAPI"),
+    path("rechercheSimilariteAPI/", views.rechercheSimilariteAPI, name="rechercheSimilariteAPI"),
     path("termes/",views.termes,name="termes"),
     path("termesAPI/", views.termesAPI, name="termesAPI"),
     path("relations/",views.relations,name="relations"),
@@ -17,15 +18,14 @@ urlpatterns = [
     path("useTermesAPI/",views.useTermesAPI,name="useTermesAPI"),
     path("thematiqueAPI/",views.thematiqueAPI,name="thematiqueAPI"),
     path("doc2vec/",views.doc2vec,name="doc2vec"),
-<<<<<<< HEAD
     path("validationen/",views.validationEn, name="validationen"),
-=======
     path("validationEnOr/",views.validationEn, name="validationEnOr"),
->>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
     path("termescsv/",views.termescsv, name="termescsv"),
     path("validationTermes/",views.validationTermes, name="validationTermes"), 
     path("validationIntervalleTermesAPI/",views.validationIntervalleTermesAPI, name="validationIntervalleTermesAPI"), 
     path("voirdoc",views.voirdoc, name="voirdoc"),
+    
+    
     
     
 ]

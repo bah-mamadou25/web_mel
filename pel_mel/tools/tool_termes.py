@@ -132,11 +132,7 @@ def remove_duplicates_and_replace_file(filepath):
     with open(filepath, 'w', newline='') as file:
         writer = csv.writer(file, delimiter=';')
         for key, value in data.items():
-<<<<<<< HEAD
             writer.writerow([key, round(value[0] / value[1], 4), "-"])
-=======
-            writer.writerow([key, round(value[0] / value[1], 2), "-"])
->>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
 
     print("Fichier nettoyé : " + filepath)
     
@@ -152,7 +148,6 @@ def csv_to_json(csv_file_path):
             json_data.append({str(line_number): row})
     print(json_data)
     # Renvoi de la réponse JSON
-<<<<<<< HEAD
     return json_data
 
 
@@ -182,6 +177,3 @@ def filter_from_csv_termes(input_file_path, reference_file_path, output_file_pat
             print(row[0])
             if row and row[0] in first_field_values:
                 writer.writerow(row)
-=======
-    return json_data
->>>>>>> f4740638c725dbf2958098ade5037a177479bbfa

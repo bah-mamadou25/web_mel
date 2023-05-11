@@ -31,6 +31,7 @@
         </div>
         <div id="loadMsg">Extraction des entités...</div>
     </div>
+    <br>
     <form action="{% url 'enAPI' %}" method="post" enctype="multipart/form-data" style="margin-top: 5px;" id="my-form" >
         <fieldset style="text-align: center;">
             {% csrf_token %}
@@ -38,12 +39,12 @@
             <input type="submit" class="btn btn-outline-primary" value="Lancer la recherche des ENs">
         </fieldset>
     </form>
-    <form action="{% url 'validationEnOr' %}" method="post" enctype="multipart/form-data" style="margin-top: 5px;" id="my-formVal" >
+    <!-- <form action="{% url 'validationEnOr' %}" method="post" enctype="multipart/form-data" style="margin-top: 5px;" id="my-formVal" >
         <fieldset style="text-align: center;">
             {% csrf_token %}
             <input type="file" class="form-control-file" id="EntiteNV" name="EntiteNV" accept=".csv" >
             <input type="submit" class="btn btn-outline-primary" value="Continuer une validation">
-        </fieldset>
+        </fieldset> -->
     </form>
 
 

@@ -116,6 +116,7 @@ def get_most_similar_word(words, output_similar_words_path):
         output_similar_words.write("\n")
     output_similar_words.close()
 
+
 def get_similar_terms_for_theme_controller(model_path, themes_list_path, levels, result_path):
     """
     Permet de récupérer le nuage de mots d'une thématique et saisir dans le fichier de sortie

@@ -235,11 +235,7 @@ def csv_no_header_to_html_table(csv_path):
                 html_table += "<td>'{}'</td>".format(escape(data))
             if len(row) == 3:
                 html_table += "<td></td>" # revoir pourquoi bug pour niveau 3
-<<<<<<< HEAD
-            url = reverse('voirdoc') + '?id=' + str(i+16)
-=======
             url = reverse('voirdoc') + '?id=' + str(i+1)
->>>>>>> f4740638c725dbf2958098ade5037a177479bbfa
             html_table += '<td><a href="{}">voir</a></td>'.format(url)
             html_table += "</tr>\n"
 
