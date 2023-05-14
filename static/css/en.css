@@ -1,4 +1,6 @@
 
+
+
 #table_organisations tbody,
 #table_personnes tbody {
           height: 500px;
@@ -32,10 +34,9 @@
           color: #007bff;
       }
       
-.selectionne {
-    color: blue;
-}
 
 table{
     width: 60vw;
 }
+
+

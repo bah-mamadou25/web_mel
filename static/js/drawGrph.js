@@ -1,4 +1,3 @@
-
 function drawGraphe(data) {
   const min = Math.min(...data);
   const max = Math.max(...data);
@@ -17,7 +16,9 @@ function drawGraphe(data) {
   for (let i = 0; i < intervalCount; i++) {
     const lowerBound = min + i * intervalSize;
     const upperBound = min + (i + 1) * intervalSize;
-    intervalLabels.push(`${lowerBound.toFixed(3)} - ${upperBound.toFixed(3)}`);
+    const valuesInRange = data.filter(value => value >= lowerBound && value <= upperBound).length;
+    const label = `${lowerBound.toFixed(3)} - ${upperBound.toFixed(3)} (${valuesInRange})`;
+    intervalLabels.push(label);
   }
 
   const ctx = document.getElementById('myChart').getContext('2d');
@@ -50,4 +51,5 @@ function drawGraphe(data) {
     }
   });
 }
+
 

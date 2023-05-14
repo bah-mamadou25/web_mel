@@ -226,15 +226,18 @@ def csv_no_header_to_html_table(csv_path):
     :rtype: str
     """
     html_table = ""
+            
+    checkhtml='<td><input class="form-check-input is-valid" type="checkbox" value="" id="validationCheckbox" required></td>'
     with open(csv_path, 'r') as csv_file:
         reader = csv.reader(csv_file, delimiter=';')
         next(reader) # Ignore la première ligne
         for i, row in enumerate(reader):
             html_table += "<tr>"
             for data in row:
-                html_table += "<td>'{}'</td>".format(escape(data))
+                html_table += "<td>{}</td>".format(escape(data))
             if len(row) == 3:
                 html_table += "<td></td>" # revoir pourquoi bug pour niveau 3
+            html_table+=checkhtml
             url = reverse('voirdoc') + '?id=' + str(i+1)
             html_table += '<td><a href="{}">voir</a></td>'.format(url)
             html_table += "</tr>\n"
@@ -258,7 +261,7 @@ def create_files_from_source(lst_txt, lst_folder, directory_path):
     """
     for index, element in enumerate(lst_txt, start=0):
         file_path = os.path.join(directory_path, f'{index+1}.txt')
-        content = "## REPERTOIRE : {} ## \n{}".format(lst_folder[index].split('data/')[1], element)
+        content = "REPERTOIRE : {} ##split## \n{}".format(lst_folder[index].split('data/')[1], element)
         with open(file_path, 'w') as file:
             file.write(content)
 
