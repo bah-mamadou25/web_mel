@@ -42,8 +42,9 @@
       
             {% csrf_token %}
             <br>
-          <table class="table" style="width:60vw; margin:auto">
-            <div class="container">
+            <div class="container" style="width:60vw; margin:auto;" >
+
+          <table class="table" >
             <tr>
             <td>
             <label for="corpus"> choisir le corpus nettoyé et segmenté : </label>
@@ -100,8 +101,10 @@
             </tr>
           </table>
 
+            <div style="width: 60vw; text-align: center;">
+              <input type="submit" class="btn btn-primary" value="Lancer la recherche des termes" style="margin: auto;">
 
-              <input type="submit" class="btn btn-primary" value="Lancer la recherche des termes">
+            </div>
         </div>
     </form>
     <hr>
