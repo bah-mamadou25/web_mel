@@ -38,6 +38,14 @@ function checkRowCount() {
       // 
 
       setEventVoir();
+      document.getElementById("validationV").addEventListener("click", onClicValides);
+      document.getElementById("validationT").addEventListener("click", onClicTous);
+      document.getElementById("validationN").addEventListener("click", onClicNonValides);
+      modifDropDownByLevel('#resultat',1);
+      modifDropDownByLevel('#resultat',2);
+      modifDropDownByLevel('#resultat',3);
+
+
       
     } 
   }, 2000); // Vérifier toutes les 2 secondes
@@ -133,4 +141,103 @@ function getThematiquebyLevel(tbodyId,tdNum) {
     })
 
     return resultat;
+}
+
+function modifDropDownByLevel(tbodyId,level){
+    var levelIds=["#ulLevel1","#ulLevel2","#ulLevel3"]
+    var toAdd=getThematiquebyLevel(tbodyId,level+1) // car niveau se situe à td+1
+
+    for (const l of toAdd) {
+        
+        document.querySelector(levelIds[level-1]).innerHTML+='<li class="dropdown-item" >'+l+'</li>';
+    }
+}
+
+
+
+
+
+
+////////////FILTRE 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Fonction pour masquer les lignes qui ne correspondent pas au critère
+function masquerLignesNonValidees() {
+   
+    var lignes = document.querySelectorAll("#resultat tr");
+  
+  
+    lignes.forEach(function (ligne) {
+    
+      var cinquiemeTd = ligne.querySelector("td:nth-of-type(5)");
+  
+      var checkbox = cinquiemeTd.querySelector("input[type='checkbox']");
+  
+      if (!checkbox.checked) {
+        ligne.style.display = "none";
+      }else{
+        ligne.style.display =""
+      }
+    });
+  }
+
+  function masquerLignesValidees() {
+   
+    var lignes = document.querySelectorAll("#resultat tr");
+  
+  
+    lignes.forEach(function (ligne) {
+    
+      var cinquiemeTd = ligne.querySelector("td:nth-of-type(5)");
+  
+      var checkbox = cinquiemeTd.querySelector("input[type='checkbox']");
+  
+      if (checkbox.checked) {
+        ligne.style.display = "none";
+      }else{
+        ligne.style.display =""
+      }
+    });
+  }
+
+
+
+
+  
+  function afficherToutesLesLignes() {
+    var lignes = document.querySelectorAll("#resultat tr");
+  
+    lignes.forEach(function (ligne) {
+      ligne.style.display = "";
+    });
+  }
+  
+  function onClicValides() {
+    masquerLignesNonValidees();
+    document.querySelector('#appliedV').innerHTML='[Validé.s]'
+  }
+  
+  function onClicTous() {
+    afficherToutesLesLignes();
+    document.querySelector('#appliedV').innerHTML='[Tous]'
+
+  }
+  
+
+function onClicNonValides() {
+    masquerLignesValidees();
+    document.querySelector('#appliedV').innerHTML='[Non validé.s]'
+
 }

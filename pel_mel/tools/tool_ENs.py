@@ -74,8 +74,9 @@ def get_named_entities(request,input_text_path, output_per_path, output_org_path
     else:
         # le fichier est très volumineux, il faut le découper en plusieurs fichiers et renvoyer
         # un message d'erreur à l'interface
+        print("debug")
         split_list_of_phrases(request,input_text_path)
-
+        print("debug done")
         return 'too_bulky'
 
 

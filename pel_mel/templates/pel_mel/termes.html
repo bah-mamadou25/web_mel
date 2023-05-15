@@ -38,33 +38,71 @@
         </div>
         <div id="loadMsg">Extraction des termes...</div>
     </div>
-    <form action="{% url 'termesAPI' %}" method="post"  id="my-form" enctype="multipart/form-data" style="margin-top: 5px;">
-        <fieldset style="text-align: center;">
+    <form action="{% url 'termesAPI' %}" method="post"  id="my-form" enctype="multipart/form-data" style="margin-top: 5px;" style="width:100vw; ">
+      
             {% csrf_token %}
             <br>
-            <br>
+          <table class="table" style="width:60vw; margin:auto">
+            <div class="container">
+            <tr>
+            <td>
             <label for="corpus"> choisir le corpus nettoyé et segmenté : </label>
+
+            </td>
+              <td>
             <input type="file" class="form-control-file" id="corpus" name="corpus" accept=".txt" required><br><br>
-            
-            <div class="form-check form-switch form-check-inline"> 
+
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <label class="form-check-label" for="flexSwitchCheckChecked">Reduire les termes à leur racine </label>
-                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked name="reduire"> 
-              </div>  <br><br>
+
+              </td>
+            <td>
+              <div class="form-check form-switch form-check-inline"> 
+              <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked name="reduire"> 
+
+              </div> 
+
+            </td>
+            </tr>
+            <tr>
+              <td>
               <label for="" > Méthode de Scoring : </label>
-              <select class="form-select" name="methodeScoring"  aria-label="Default select example" style="width : 190px; display: inline-block;">
-                <option value="TFIDF_STANDARD" selected>TFIDF_STANDARD</option>
-                <option value="FREQUENCE">FREQUENCE</option>
-                <option value="TFIDF_LOG">TFIDF_LOG</option>
-              </select>
-              <br><br>
+
+              </td>
+              <td>
+                <select class="form-select" name="methodeScoring"  aria-label="Default select example" style="width : 190px; display: inline-block;">
+                  <option value="TFIDF_STANDARD" selected>TFIDF_STANDARD</option>
+                  <option value="FREQUENCE">FREQUENCE</option>
+                  <option value="TFIDF_LOG">TFIDF_LOG</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
               <label for="min">Nombre min de mots dans un terme : </label>
+
+              </td>
+              <td>
               <input type="number" name="min" id="min" min="1" value="2" style="width: 70px;" required> <br><br>
+              </td>
+            </tr>
+            <tr>
+              <td>
               <label for="min">Nombre max de mots dans un terme : </label>
+
+              </td>
+              <td>
               <input type="number" name="max" id="max" min="1" value="4" style="width: 70px;" required>
-              <br><br>
+              </td>
+            </tr>
+          </table>
+
 
               <input type="submit" class="btn btn-primary" value="Lancer la recherche des termes">
-        </fieldset>
+        </div>
     </form>
     <hr>
     <div style="width: 100vw; text-align: center;">
@@ -125,6 +163,51 @@
               </div>
             </div>
           </div>
+
+
+
+
+                <!-- Aide Modal -->
+      <div class="modal fade" id="aideModal" tabindex="-1" aria-labelledby="aideModalLabel" aria-hidden="true" >
+        <div class="modal-dialog d-flex justify-content-center" style="width: 60vw;">
+          <div class="modal-content " style="width: 60vw;">
+            <div class="modal-header">
+              <h5 class="modal-title" id="aideModalLabel">Aide</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="width: 60vw;">
+            <ul>
+                <li>Pour commencer : 
+                    <ol style="list-style: circle;">
+                       <li>Soumettre le fichier segmenté en phrases à l'accueil de l'application (Il se trouve dans le fichierZip téléchargé)</li>
+                       <li>Lancer la recherche qui prendra  plusieurs minutes</li>
+                        <li>Une fois la recherche terminée: </li>
+                        <ol>
+                          <li>vous pouvez valider les termes en cliquant sur <strong> valider </strong></li>
+                          <li>Ou valider via une liste de termes : </li>
+                          <ol>
+                            <li>une fois la modale affichée : </li>
+                            <li>Choisir un fichier csv dont chaque ligne contient <span style="color: red;">1 champ</span> </li> 
+                            <li>Soumettre ce fichier :</li>
+                            <li>il vous renvoiera par la suite les termes trouvés qui figure dans votre liste de termes</li>
+
+                          </ol>
+                        </ol>
+
+                    </ol>
+                </li>
+                
+            </ul>
+         
+       
+    
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 </body>
 

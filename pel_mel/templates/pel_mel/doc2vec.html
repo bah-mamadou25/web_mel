@@ -62,58 +62,6 @@
 
 
 
-<div class="modal fade" id="aideModal" tabindex="-1" aria-labelledby="aideModalLabel" aria-hidden="true" >
-    <div class="modal-dialog d-flex justify-content-center" style="width: 60vw;">
-      <div class="modal-content " style="width: 60vw;">
-        <div class="modal-header">
-          <h5 class="modal-title" id="aideModalLabel">Aide</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" style="width: 60vw;">
-        <ul>
-            <li>Pour commencer : 
-                <ol style="list-style: upper-roman;">
-                    <li>Au nineau du menu « Fichier » :
-                        <ul>
-                            <li>Créer votre corpus : <ul>
-                                <li>Dans le menu « Fichier », cliquer sur « créer un corpus »;</li>
-                                <li>Sélectionner le répertoire parent qui contient les sous-répertoires / fichiers (.txt, .doc, .pdf, .xml (pour les e-mail)...);</li>
-                                <li>Suivre les indications jusqu'à la fin du processus (création de corpus, nettoyage de corpus, segmentation par phrases);</li>
-                                <li>Le logiciel crée automatiquement un répertoire « workspace » (s'il n'ai pas déjà créé) dans la racine du projet (là où vous avez installé le logiciel).</li>
-                                <li>Dans le workspace, vous trouverez tous les fichiers créés (le corpus initial, le corpus nettoyé, le corpus segmenté en phrases...), ainsi que d'autres répertoires vides (Entités nommées, Termes, Relations...) pour sauvegarder les différents fichiers de sortie par la suite.</li>
-                                <li>Nettoyer un corpus existant.</li>
-                                <li>Visualiser un corpus existant.</li>
-                               
-                            </ul></li>
-  
-                        </ul>
-                    </li>
-                    <li>
-                        Au niveau de cette fenêtre pricipale, il y a 5 boutons principaux :
-                            <ol>
-                                <li>Entités nommées</li>
-                                <li>Termes</li>
-                                <li>Extraction de relations symantiques entre termes par la méthode des patrons</li>
-                                <li>Extraction de relations entre termes par la méthode symbolique (Word2Vec)</li>
-                                <li> Classification des messages par thématiques</li>
-                            </ol>
-                    </li>
-                </ol>
-            </li>
-            
-        </ul>
-
-     <p> Pour les détails d'utilisation de ces 5 boutons, vous allez trouver des guides d'utilisations dans chaque nouvelle fenêtre ouverte.</p>       
-   
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<br>
      <main>
         
 
@@ -212,7 +160,7 @@
                         Thématique NV1
                       </a>
                     
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="ulLevel1">
                         <li class="dropdown-item" >Tous</li>
                       </ul>
                     </div>
@@ -224,7 +172,7 @@
                         Thématique NV2
                       </a>
                     
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="ulLevel2" >
                         <li class="dropdown-item" >Tous</li>
                       </ul>
                     </div>
@@ -232,11 +180,11 @@
                   </th>
                   <th scope="col">
                     <div class="dropdown">
-                      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      <a class="btn btn-secondary dropdown-toggle"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         Thématique NV3
                       </a>
                     
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="ulLevel3">
                         <li class="dropdown-item" >Tous</li>
                       </ul>
                     </div>
@@ -244,14 +192,14 @@
                   </th>
                   <th scope="col">
                     <div class="dropdown">
-                      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      <a class="btn btn-secondary dropdown-toggle"  role="button" id="validation" data-bs-toggle="dropdown" aria-expanded="false">
                         Validation
                       </a>
                     
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li class="dropdown-item" >Tous</li>
-                        <li class="dropdown-item" >Validés</li>
-                        <li class="dropdown-item" >Non validés</li>
+                        <li class="dropdown-item" id="validationT" >Tous</li>
+                        <li class="dropdown-item" id="validationV"  >Validés</li>
+                        <li class="dropdown-item" id="validationN" >Non validés</li>
 
                       </ul>
                       
@@ -279,6 +227,32 @@
             </div>
           
      </main>
+
+
+
+
+<div class="modal fade" id="aideModal" tabindex="-1" aria-labelledby="aideModalLabel" aria-hidden="true" >
+  <div class="modal-dialog d-flex justify-content-center" style="width: 60vw;">
+    <div class="modal-content " style="width: 60vw;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="aideModalLabel">Aide</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="width: 60vw;">
+      <ul>
+          
+      </ul>
+
+ 
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
+</div>
+<br>
 </body>
 
 </html>

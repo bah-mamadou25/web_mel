@@ -297,7 +297,7 @@ def enAPI(request):
         tool_ENs.get_named_entities(request,project_params.workspace_path(request)+'data/'+fichier.name, 
                                     project_params.workspace_path(request)+'workspace/ENs/pers.csv',
                                     project_params.workspace_path(request)+'workspace/ENs/org.csv')
-
+        print("end")
         if os.path.exists(project_params.workspace_path(request)+"data/bulky"):
             tool_ENs.fusion_files(project_params.workspace_path(request)+"workspace/ENs","pers.csv",
                                   project_params.workspace_path(request)+"workspace/ENs/pers.csv")
@@ -306,7 +306,7 @@ def enAPI(request):
 
         table_personnes = tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/pers.csv')
         table_organisations = tool_ENs.csv_to_html_table(project_params.workspace_path(request)+'workspace/ENs/org.csv')
-
+    
     data = {
             'table_personnes': table_personnes,
             'table_organisations': table_organisations,
