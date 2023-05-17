@@ -1,26 +1,5 @@
 
 
-    $("#intervalleButton").click(()=>{
-        minScore=parseFloat(prompt('saisir le score min :'))
-        maxScore=parseFloat(prompt('saisir le score max :'))
-        console.log(minScore+' && '+maxScore)
-        const baseUrl = window.location.origin;
-        const apiEndpoint = "validationIntervalleTermesAPI/";
-
-        const apiUrl = new URL(apiEndpoint, baseUrl).href;
-        console.log(apiUrl)
-        fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            // Faites quelque chose avec les données JSON
-            downloadFilteredTerme(filterJsonByScore(data,minScore,maxScore));
-        })
-        .catch(error => {
-            // Gérez les erreurs de la requête
-            console.error('Erreur :', error);
-    });
-      
-})
 function filterJsonByScore(data, minScore, maxScore) {
     // Filtrer les éléments en fonction du score
     const filteredData = data.filter((entry) => {

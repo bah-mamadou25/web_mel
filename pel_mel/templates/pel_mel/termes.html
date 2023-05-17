@@ -14,7 +14,6 @@
     <script src="{% static 'js/jquery-3.6.4.min.js' %}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script src="{% static 'js/drawGrph.js' %}" defer></script>
-    <script src="{% static 'js/drawGrph.js' %}" defer></script>
     <script src="{% static 'js/tools.js' %}" defer></script>
     <script src="{% static 'js/en.js' %}" defer></script>
     <script src="{% static 'js/validationIntervalleScore.js' %}" defer></script>
@@ -31,6 +30,24 @@
       <button class="btn btn btn-outline-info" type="button" data-bs-toggle="modal" data-bs-target="#aideModal">Aide ?</button>
     </div>
   </nav>
+
+
+    <!-- toast - gestion event dans tools.js-->
+
+    <!-- <div aria-live="polite" aria-atomic="true" style="position: fixed; min-width:300px; ">
+      <div class="toast" style="position: absolute; top: 0; right: 0;">
+        <div class="toast-header">
+          <strong class="mr-auto">Info Validation </strong>
+          <small>11 mins ago</small>
+          <button type="button" class=" close" data-dismiss="toast" aria-label="Close" style=" display: inline-block; margin-right: 2px;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="toast-body">
+          Hello, world! This is a toast message.
+        </div>
+      </div>
+    </div> -->
 
       <div id="spinner-container" style="display: none;">
         <div id="spinner" class="spinner-border" role="status" style=" width: 200px;">
@@ -62,7 +79,7 @@
               </td>
             <td>
               <div class="form-check form-switch form-check-inline"> 
-              <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked name="reduire"> 
+              <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"  name="reduire"> 
 
               </div> 
 
@@ -109,9 +126,7 @@
     </form>
     <hr>
     <div style="width: 100vw; text-align: center;">
-        <button type="button" class="btn btn-success " id="intervalleButton">valider par intervalle de score</button>
-        <a href="{% url 'validationTermes' %}"  class="btn btn-primary disabled"  id="valideButton">valider</a> 
-        <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#listeModal" id="listeButton">valider avec une liste de termes</button>
+        <a href="{% url 'validationTermes' %}"  class="btn btn-primary "  id="valideButton">valider</a> 
 
         <br>
         <!-- graphe -->
@@ -143,29 +158,7 @@
     </div>
  
 
-          <!-- choisir liste terme Modal -->
-          <div class="modal fade" id="listeModal" tabindex="-1" aria-labelledby="listeModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="listeModalLabel">choisr la liste des termes (*.csv) </h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-    
-    
-                <div class="modal-body">
-               <form action="" method="post" enctype="multipart/form-data">
-                     {% csrf_token %}
-                    <input type="file" class="form-control-file" id="listeTerme" name="listeTerme" accept=".csv">  
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-primary" value="Valider" >
-                </div>
-              </form>
-              </div>
-            </div>
-          </div>
+
 
 
 
@@ -212,8 +205,9 @@
       </div>
     </div>
 
+
+
+
 </body>
-
-
 
 </html>

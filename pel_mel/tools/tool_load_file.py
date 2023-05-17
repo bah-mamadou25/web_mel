@@ -2,7 +2,7 @@ import zipfile
 from django.http import HttpResponse, FileResponse
 from django.views.generic import View
 import os,time,shutil,re
-import nltk
+import nltk,chardet
 from tika import parser
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -37,6 +37,7 @@ def delete_content(directory):
     else:
         print(f"Le répertoire {directory} n'existe pas.")
 
+
 def createCorpus(input_path, output_path):
     """
     Création d'un corpus texte à partir de plusieurs répertoires/sous-répertoires
@@ -44,18 +45,21 @@ def createCorpus(input_path, output_path):
     :param input_path: le chemin complet vers le répertoire père contenant les sous-répertoire/fichiers à traiter
     :param output_path: le chemin complet où vous voulez stocker le fichier de sortie
     """
-    
+
     files_processed = 0
-    output_file = open(output_path, "w")
+    output_file = open(output_path, "w", encoding="utf-8",errors="ignore")
     for rootdir, dirs, files in os.walk(input_path):
         for file in files:
             print(file)
             if file.endswith(('.pdf', '.doc', '.docx', '.DOC', '.DOCX', '.txt')):
                 filename = os.path.join(rootdir, file)
-                file_parsed = parser.from_file(filename)
-                output_file.write(str(file_parsed['content']))
-                files_processed = files_processed + 1
-
+                try:
+                    with open(filename, "r", encoding="utf-8") as f:
+                        content = f.read()
+                        output_file.write(content)
+                        files_processed += 1
+                except UnicodeDecodeError:
+                    print(f"Erreur de décodage pour le fichier: {filename}")
             if file.endswith('.xml') or file.endswith('.XML'):
                 filename = os.path.join(rootdir, file)
                 tree = ET.parse(filename)
@@ -65,7 +69,7 @@ def createCorpus(input_path, output_path):
                     for TextContent in root.findall('TextContent'):
                         text_by_file += TextContent.text + " "
                     output_file.write(str(text_by_file))
-                    files_processed = files_processed + 1
+                    files_processed += 1
     output_file.close()
     print("Corpus créé: " + output_path.strip())
     print("Nombre total de fichiers traités ", files_processed)
@@ -96,7 +100,6 @@ def download_directory_as_zip(path):
     # Chemin absolu du répertoire
     dirpath = os.path.join(os.getcwd(), path)
     
-    # Créer un nom de fichier unique pour le fichier zip
     zip_filename = os.path.basename(dirpath) + '.zip'
     
     # Créer un objet ZipFile et ajouter chaque fichier du répertoire au fichier zip

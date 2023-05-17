@@ -227,7 +227,7 @@ def csv_no_header_to_html_table(csv_path):
     """
     html_table = ""
             
-    checkhtml='<td><input class="form-check-input is-valid" type="checkbox" value="" id="validationCheckbox" required></td>'
+    checkhtml='<td><input class="form-check-input is-valid" type="checkbox" checked  value="" id="validationCheckbox" required></td>'
     with open(csv_path, 'r') as csv_file:
         reader = csv.reader(csv_file, delimiter=';')
         next(reader) # Ignore la première ligne

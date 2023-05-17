@@ -58,10 +58,13 @@ def terms_extraction(corpus_path, termsExtracted_path, STEM, METODE_SCORING, LON
         if res:
             terms_list = retreiveTerms(termsExtracted_path)
             terms_list_cleaned = cleanUpTerms(terms_list)
-            fw = open(termsExtracted_path, "w", encoding="UTF-8")
+            fw = open(termsExtracted_path, "w", encoding="UTF-8",errors="ignore")
             for i in terms_list_cleaned:
-                fw.write(str(i.term).strip()+";"+str(i.score).strip()+";"+str(i.source).strip())
-                fw.write("\n")
+                
+                long=len(str(i.term).split(" "))
+                if long >= int(LONGUEURMIN) and long<=int(LONGUEURMAX): 
+                    fw.write(str(i.term).strip()+";"+str(i.score).strip()+";"+str(i.source).strip())
+                    fw.write("\n")
             fw.close()
             return terms_list_cleaned
         else:

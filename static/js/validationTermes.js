@@ -291,3 +291,32 @@ function RestaureTerme(event) {
 
 }
 
+// validation par liste
+
+document.querySelector("#submit-valid-list").addEventListener("click", (e) => {
+  e.preventDefault();
+  console.log("ok");
+  const fileInput = document.getElementById('listeTermeToValid');
+  const file = fileInput.files[0];
+  var dataArray = [];
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const contents = e.target.result;
+    dataArray = parseCSV(contents);
+    
+    //console.log(dataArray); 
+    validFromCsv("#attente tbody", [1, 2, 3], dataArray); //ligne 311
+  };
+  reader.readAsText(file);
+});
+
+
+
+$(".valid-from-inter").click(()=>{
+  minScore=parseFloat(prompt('saisir le score min :'))
+  maxScore=parseFloat(prompt('saisir le score max :'))
+validFromInter("#attente tbody",minScore,maxScore,3)
+
+
+
+})
