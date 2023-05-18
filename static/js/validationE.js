@@ -122,4 +122,19 @@ function handleSubmit(event) {
 
 
 
-
+document.querySelector("#submit-valid-list").addEventListener("click", (e) => {
+  e.preventDefault();
+  console.log("ok");
+  const fileInput = document.getElementById('listeTermeToValid');
+  const file = fileInput.files[0];
+  var dataArray = [];
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const contents = e.target.result;
+    dataArray = parseCSV(contents);
+    
+    //console.log(dataArray); 
+    validFromCsv("#attente tbody", [1], dataArray); //ligne 311
+  };
+  reader.readAsText(file);
+});

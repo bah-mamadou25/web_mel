@@ -71,17 +71,30 @@ function getCookie(name) {
     return dataArray;
   }
   
-  function validFromInter(selector,min,max,numTdScoreLocated){
+  function validFromInter(selector, min, max, numTdScoreLocated) {
     const tbody = document.querySelector(selector);
     const rows = tbody.getElementsByTagName('tr');
-    for (let i = 0; i < rows.length; i++) {
-      let rightTd=rows[i].querySelector('td:nth-Child('+numTdScoreLocated+')')
-      let score=parseFloat(rightTd.innerText)
-      if( score>=min && score<=max) {
-        const svgElement = document.querySelectorAll(selector + ' ' + 'tr td:last-child svg')[i];
-        const clickEvent = new Event('click');
-        svgElement.dispatchEvent(clickEvent);
+    const chunkSize = 100; // Nombre de lignes à traiter par lot
+  
+    const processChunk = (start) => {
+      const end = Math.min(start + chunkSize, rows.length);
+  
+      for (let i = start; i < end; i++) {
+        let rightTd = rows[i].querySelector('td:nth-child(' + numTdScoreLocated + ')');
+        let score = parseFloat(rightTd.innerText);
+  
+        if (score >= min && score <= max) {
+          const svgElement = document.querySelectorAll(selector + ' tr td:last-child svg')[i];
+          const clickEvent = new Event('click');
+          svgElement.dispatchEvent(clickEvent);
+        }
       }
-    }
-
+  
+      if (end < rows.length) {
+        setTimeout(() => processChunk(end), 0); // Délai de 0 millisecondes pour éviter de bloquer le navigateur
+      }
+    };
+  
+    processChunk(0); // Démarrer le traitement du premier lot
   }
+  
