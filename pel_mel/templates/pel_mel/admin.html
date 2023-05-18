@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page d'administration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="message" class="{% if 'succès' in message %}bg-success{% else %}bg-danger{% endif %}" style="width: 100vw;height: auto; text-align: center;">{{ message }}</div>
+    
+    <div class="container">
+        <div class="row mt-5">
+            <!-- Partie Ajout d'utilisateur -->
+            <div class="col-md-4">
+                <h3>Ajouter un utilisateur</h3>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Login du nouvel utilisateur</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirmer le mot de passe</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" name="toAdd">Ajouter</button>
+                </form>
+            </div>
+            
+            <!-- Partie Suppression d'utilisateur -->
+            <div class="col-md-4">
+                <h3>Supprimer un utilisateur</h3>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="user_id">Login de l'utilisateur</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger" name="toDelete">Supprimer</button>
+                </form>
+            </div>
+            
+            <!-- Partie Liste des utilisateurs -->
+            <div class="col-md-4">
+                <h3>Liste des utilisateurs</h3>
+                <ul>
+                    {% for user in users %}
+                        <li>{{ user.username }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+
+    
+    <script>
+        // Vérification de la correspondance des mots de passe
+        const password = document.getElementById('password');
+        const confirm_password = document.getElementById('confirm_password');
+
+        function validatePassword() {
+            if (password.value !== confirm_password.value) {
+                confirm_password.setCustomValidity("Les mots de passe ne correspondent pas");
+            } else {
+                confirm_password.setCustomValidity('');
+            }
+        }
+
+        password.addEventListener('change', validatePassword);
+        confirm_password.addEventListener('keyup', validatePassword);
+        
+
+    </script>
+</body>
+</html>

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/en.css' %}">
     <script src="{% static 'js/jquery-3.6.4.min.js' %}" defer></script>
     <script src="{% static 'js/tools.js' %}" defer></script>
     <script src="{% static 'js/word2vec.js' %}" defer></script>
@@ -75,7 +76,7 @@
 
      <main>
         
-            <div style="width: 100vw; text-align: center; background-color: red; ">
+            <div style="width: 100vw; text-align: center; " >
                 <div class="form-check" style="display: inline-block;">
                     <input class="form-check-input" type="radio" name="modele" id="train" checked>
                     <label class="form-check-label" for="train">
@@ -91,11 +92,11 @@
             </div >
             <!-- train div  -->
             <div id="spinner-container" style="display: none;">
-                <div id="spinner" class="spinner-border" role="status" style=" width: 200px;">
-                    <span class="sr-only"></span>
-                </div>
-                <div id="loadMsg">Traitement...</div>
-            </div>
+              <div id="spinner" class="spinner-border" role="status" style=" width: 200px;">
+                  <span class="sr-only"></span>
+              </div>
+              <div id="loadMsg">Chargement ...</div>
+          </div>
 
             <div style="width: 100vw; text-align: center; " id="trainDiv">
                 <br>
@@ -135,7 +136,7 @@
 
             <div style="width: 100vw; text-align: center; display:none;" id="useDiv" >
 
-                <div style="width: 100vw; text-align: center; background-color: red;">
+                <div style="width: 100vw; text-align: center;">
                     <div class="form-check" style="display: inline-block;">
                         <input class="form-check-input" type="radio" name="mode" id="terme" checked>
                         <label class="form-check-label" for="terme">
@@ -157,7 +158,7 @@
                 <fieldset >
                     {% csrf_token %}
 
-                    <label for="corpus"> Selectionner la liste des termes : </label>
+                    <label for="corpus"> Sélectionner la liste des termes : </label>
                     <input type="file" class="form-control-file" id="corpusTermes" name="corpusTermes" accept=".csv" ><br>
                 </fieldset>
                <br>
@@ -166,12 +167,14 @@
             </form>
             <br>
             <p> <b>liste des termes similaires : </b></p>
+            <button id="download-sim" class=" btn btn-outline-dark" >Télécharger</button>
+
             <table class="table" style="width: 70vw;margin: auto; text-align: center;">
                 <thead>
                   <tr>
                     <th scope="col" style="width:50px">Num</th>
                     <th scope="col">Terme</th>
-                    <th scope="col">Terme similaires </th>
+                    <th scope="col">Terme.s similaire.s </th>
                   </tr>
                 </thead>
                 <tbody id="termesSimilaires">
@@ -200,6 +203,8 @@
                 </form>
                 <br>
                 <p> <b>Nuage de mots par thématique : </b></p>
+            <button id="download-them" class=" btn btn-outline-dark" >Télécharger</button>
+
                 <table class="table" style="width: 70vw;margin: auto; text-align: center;">
                     <thead>
                       <tr>

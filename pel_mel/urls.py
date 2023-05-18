@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     path("", views.connex, name="connex"),
     path("accueil/", views.accueil, name="accueil"),
+    path("administrateur/", views.administrateur, name="administrateur"),
     path("en/", views.en, name="en"),
     path("enapi/", views.enAPI, name="enAPI"),
     path("rechercheSimilariteAPI/", views.rechercheSimilariteAPI, name="rechercheSimilariteAPI"),

@@ -1,3 +1,7 @@
+$('#download-them').hide();
+$('#download-sim').hide();
+
+
 $(document).ready(function() {
     $('#train').click(function() {
         $('#trainDiv').show();
@@ -103,8 +107,23 @@ $('#my-trainForm').on('submit', function (event) {
                     
 
                     $('#termesSimilaires').html(data.termesSimilaires);
-
+                    $('#termesSimilaires tr td:last-child').click((event) => {
+                      const tdElement = event.target;
+                      const currentValue = tdElement.innerText;
                     
+                      const confirmation = confirm('Voulez-vous modifier ce contenu : ' + currentValue + ' ?');
+                      if (confirmation) {
+                        const newValue = prompt('Modifier le contenu :', currentValue);
+                        if (newValue !== null) {
+                          tdElement.innerText = newValue;
+                        }
+                      }
+
+                      $('#download-sim').show()
+                      $('#download-sim').click((event)=>{
+                        exportToCSV('#termesSimilaires','termes_similaires.csv')
+                      })
+                    });
                 })
                 .catch(error => {
                     // Cache le spinner
@@ -150,6 +169,24 @@ $('#my-trainForm').on('submit', function (event) {
                         
     
                         $('#thematiques').html(data.thematiques);
+
+                        $('#thematiques tr td:last-child').click((event) => {
+                          const tdElement = event.target;
+                          const currentValue = tdElement.innerText;
+                        
+                          const confirmation = confirm('Voulez-vous modifier ce contenu : ' + currentValue + ' ?');
+                          if (confirmation) {
+                            const newValue = prompt('Modifier le contenu :', currentValue);
+                            if (newValue !== null) {
+                              tdElement.innerText = newValue;
+                            }
+                          }
+    
+                          $('#download-them').show()
+                          $('#download-them').click(()=>{
+                            exportToCSV('#thematiques','nuageDeMotsViaSearch.csv')
+                          })
+                        });
     
                         
                     })
@@ -167,9 +204,9 @@ $('#my-trainForm').on('submit', function (event) {
             });
 
 // export csv untrained
-function exportToCSV() {
+function exportToCSV(selector,fileName) {
     // Vérifier si le tbody contient des lignes
-    var tbody = document.querySelector("tbody#termes");
+    var tbody = document.querySelector(selector);
     var rows = tbody.getElementsByTagName("tr");
     if (rows.length === 0) {
       // Aucune ligne trouvée, afficher un message d'erreur ou faire une action alternative
@@ -199,7 +236,6 @@ function exportToCSV() {
     var csvContent = csvData.map(row => row.join(";")).join("\n");
   
     // Télécharger le fichier CSV
-    var fileName = "termes_liste.csv";
     var link = document.createElement("a");
     link.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent));
     link.setAttribute("download", fileName);
@@ -211,12 +247,18 @@ function exportToCSV() {
   
   // Ajouter un écouteur d'événement au bouton "export"
   var exportButton = document.getElementById("export");
-  exportButton.addEventListener("click", exportToCSV);
+  exportButton.addEventListener("click",()=>{
+    exportToCSV('#termes','liste_termes.csv')
+  } );
 
 
  
   
   $("#termes_sim").click(() => {
+
+    var res=confirm("Un fichier csv sera téléchargé, les termes similaires seront sur la même ligne")
+
+    if(!res) return;
     const baseUrl = window.location.origin;
     const apiEndpoint = "rechercheSimilariteAPI/";
     

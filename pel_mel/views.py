@@ -1,15 +1,16 @@
 # views.py
 from django.shortcuts import render,redirect
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.hashers import make_password
 from django.utils.safestring import mark_safe
 from django.http import JsonResponse
 from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns,tool_word2vec,project_params,tool_doc2vec
 import time,os,csv
+from django.contrib.auth.hashers import check_password
 from .models import User
-
+from django.db import IntegrityError
 # Create your views here.
 def connex(request):
-    
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -28,7 +29,53 @@ def connex(request):
         message = None
         
     return render(request, 'pel_mel/log.html', {'message': message})
-    
+
+
+def administrateur(request):
+    message=''
+    users=[]
+    if request.session.get('username') == 'admin':
+        users = User.get_all_users()
+        if 'toAdd' in request.POST:
+            username = request.POST['username']
+            password = request.POST['password']
+            confirm_password = request.POST['confirm_password']
+            
+            # Vérification si les mots de passe correspondent
+            if password != confirm_password:
+                message = 'Les mots de passe ne correspondent pas.'
+            else:
+                # Création d'un nouvel utilisateur
+                try:
+                    user = User(username=username)
+                    user.set_password(password)  # Hashage du mot de passe
+                    user.save()
+                    
+                    message = 'L\'utilisateur a été ajouté avec succès.'
+                    project_params.create_workspace('workspaces/'+username)
+                except IntegrityError:
+                     message = 'Le nom d\'utilisateur est déjà utilisé.'
+            
+        elif 'toDelete' in request.POST:
+            username = request.POST['username']
+            if username=='admin':
+                message='Impossible de supprimer l\'administrateur'
+                return render(request, 'pel_mel/errors/reachadmin.html',  {'message': message,'users':users})
+                
+            try:
+                user = User.objects.get(username=username)
+                user.delete()
+                message = 'L\'utilisateur a été supprimé avec succès.'
+                project_params.delete_workspace('workspaces/'+username)
+            except User.DoesNotExist:
+                message = 'L\'utilisateur n\'existe pas.'
+        else:
+            message =''
+        
+        return render(request, 'pel_mel/admin.html', {'message': message,'users':users})
+    else:
+        return render(request, 'pel_mel/errors/reachadmin.html',  {'message': message,'users':users})
+        
 
 def accueil(request):
     if request.method == 'POST':
