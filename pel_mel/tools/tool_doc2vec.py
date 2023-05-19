@@ -216,7 +216,8 @@ def retreive_classified_msg(file_path):
         return "no_result"
     
     
-def csv_no_header_to_html_table(csv_path):
+def csv_no_header_to_html_table(csv_path,nb_facettes):
+    
     """
     Convertit un fichier CSV en une table HTML.
 
@@ -233,8 +234,13 @@ def csv_no_header_to_html_table(csv_path):
         next(reader) # Ignore la première ligne
         for i, row in enumerate(reader):
             html_table += "<tr>"
+            tmp=0
             for data in row:
-                html_table += "<td>{}</td>".format(escape(data))
+                tmp+=1
+                if tmp>nb_facettes+1:
+                    html_table += '<td></td>'
+                else :
+                 html_table += "<td>{}</td>".format(escape(data))
             if len(row) == 3:
                 html_table += "<td></td>" # revoir pourquoi bug pour niveau 3
             html_table+=checkhtml
@@ -266,3 +272,21 @@ def create_files_from_source(lst_txt, lst_folder, directory_path):
             file.write(content)
 
         print(f'Le fichier {file_path} a été créé avec succès.')
+
+
+
+def liste_thems_for_li(file_path,start_with):
+    result = []
+    positions = set()
+
+    with open(file_path, 'r') as file:
+        next(file)
+        for line in file:
+            fields = line.strip().split(';')
+            for position, field in enumerate(fields[0:], start=0):
+                field_with_position = f'{start_with}{field}'
+                if field_with_position not in positions:
+                    result.append(field_with_position)
+                    positions.add(field_with_position)
+
+    return result

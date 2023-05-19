@@ -1,8 +1,27 @@
+$('.spinner-border').hide();
+$('#spinner-container').hide();
+
 // Fonction pour vérifier si le tbody a au moins une ligne
 function checkRowCount() {
     var tbody = document.getElementById("resultat");
     return tbody.getElementsByTagName("tr").length > 0;
   }
+
+
+    const input1 = document.getElementById('thematique2');
+    const input2 = document.getElementById('thematique3');
+  
+    input2.disabled = true; // Désactiver le deuxième champ au chargement de la page
+  
+    input1.addEventListener('change', () => {
+      if (input1.files.length > 0) {
+        input2.disabled = false; // Activer le deuxième champ si le premier champ est choisi
+      } else {
+        input2.disabled = true; // Désactiver le deuxième champ si le premier champ est vide
+      }
+    });
+  
+  
   
   // Timer pour vérifier toutes les 2 secondes
   var timer = setInterval(function() {
@@ -11,10 +30,49 @@ function checkRowCount() {
       // Arrêter le timer
       clearInterval(timer);
    
-      // Sélectionner le tbody par son id
+
+
+      editFacette();
+
+      $('.spinner-border').show();
+      $('#spinner-container').show();
+      // 
+
+      setEventVoir();
+      document.getElementById("validationV").addEventListener("click", onClicValides);
+      document.getElementById("validationT").addEventListener("click", onClicTous);
+      document.getElementById("validationN").addEventListener("click", onClicNonValides);
+      modifDropDownByLevel('#liste-thematiques','1:',1);
+      modifDropDownByLevel('#liste-thematiques','2:',2);
+      modifDropDownByLevel('#liste-thematiques','3:',3);
+
+      if(isEmptyColumn('#resultat',2)){
+        document.querySelector('th:nth-child(3)').style.display='none';
+        hideTdsByIndex('#resultat',2)
+        
+      }
+
+      if(isEmptyColumn('#resultat',3)){
+        document.querySelector('th:nth-child(4)').style.display='none';
+        hideTdsByIndex('#resultat',3)
+        
+      }
+
+      $('.spinner-border').hide();
+      $('#spinner-container').hide();
+
+
+      
+    } 
+  }, 2000); // Vérifier toutes les 2 secondes
+
+
+function editFacette(){
+
+      
       var tbody = document.getElementById("resultat");
   
-      // Sélectionner les troisième, quatrième et cinquième td de chaque tr
+     
       var rows = tbody.getElementsByTagName("tr");
       for (var i = 0; i < rows.length; i++) {
         var cells = rows[i].getElementsByTagName("td");
@@ -24,31 +82,25 @@ function checkRowCount() {
           // Ajouter un événement de clic à chaque td
           cell.addEventListener("click", function() {
             var text = this.textContent;
-  
+            var position=this.cellIndex
+            var rightFacette=getMatchingLiInnerText('#liste-thematiques',position+':')
+            console.log(rightFacette)
+            
             // Afficher une boîte de dialogue pour modifier le texte
             var newText = prompt("Modifier le texte :", text);
-            if (newText !== null) {
-              this.textContent = newText;
+           
+            if ((newText !== null)) {
+              if((rightFacette.includes(position+':'+newText.trim()))){
+                  this.textContent = newText;
+              }else{
+                alert('cette valeur n\'a pas été ajouté car elle ne fait pas parie de la liste fournie \n voir la liste du dropdown de la facette correspondante')
+              }
             }
           });
         }
       }
+}
 
-
-      // 
-
-      setEventVoir();
-      document.getElementById("validationV").addEventListener("click", onClicValides);
-      document.getElementById("validationT").addEventListener("click", onClicTous);
-      document.getElementById("validationN").addEventListener("click", onClicNonValides);
-      modifDropDownByLevel('#resultat',1);
-      modifDropDownByLevel('#resultat',2);
-      modifDropDownByLevel('#resultat',3);
-
-
-      
-    } 
-  }, 2000); // Vérifier toutes les 2 secondes
 
 
   function voirDoc(jsonData){
@@ -143,13 +195,13 @@ function getThematiquebyLevel(tbodyId,tdNum) {
     return resultat;
 }
 
-function modifDropDownByLevel(tbodyId,level){
+function modifDropDownByLevel(tbodyId,startwith,level){
     var levelIds=["#ulLevel1","#ulLevel2","#ulLevel3"]
-    var toAdd=getThematiquebyLevel(tbodyId,level+1) // car niveau se situe à td+1
+    var toAdd=getMatchingLiInnerText(tbodyId,startwith)  // car niveau se situe à td+1
 
     for (const l of toAdd) {
         
-        document.querySelector(levelIds[level-1]).innerHTML+='<li class="dropdown-item" >'+l+'</li>';
+        document.querySelector(levelIds[level-1]).innerHTML+='<li class="dropdown-item" >'+l.split(':')[1]+'</li>';
     }
 }
 

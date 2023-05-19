@@ -258,6 +258,7 @@ def word2vec(request):
 
 def doc2vec(request):
     resultat=''
+    thematiques=[]
     tool_ENs.create_dir(project_params.workspace_path(request)+'workspace/doc2vec')
     tool_ENs.create_dir(project_params.workspace_path(request)+'data')
             
@@ -299,30 +300,64 @@ def doc2vec(request):
             os.remove(project_params.workspace_path(request)+'data/nuage_de_mots/'+f_dir_thems.name)
             
             fs.save(project_params.workspace_path(request)+'data/'+f_thems1.name, f_thems1)
-            fs.save(project_params.workspace_path(request)+'data/'+f_thems2.name, f_thems2)
-            fs.save(project_params.workspace_path(request)+'data/'+f_thems3.name, f_thems3)
+            if f_thems2 :
+                fs.save(project_params.workspace_path(request)+'data/'+f_thems2.name, f_thems2)
+            if f_thems3:
+                fs.save(project_params.workspace_path(request)+'data/'+f_thems3.name, f_thems3)
             
             
             
             
             
             
-            
-            
-            
-            rslt=tool_doc2vec.messages_presse_classification(os.path.splitext(project_params.workspace_path(request)+'data/'+f_dir_messages.name)[0],
+            #     /!\
+            #ce bloc d'instruction permet de pallier au probleme de combien de liste de facettes ont été soumises si une seul comme dans le bloc 
+            # else alors : le meme fichier est attribuer a facette 2 et 3 
+            # A revenir dessus pour optimiser le code 
+             #     /!\
+            chemin=project_params.workspace_path(request)+'workspace/doc2vec/resultat.csv';
+            nb_facettes=1 # une liste de thematiques requise
+            if f_thems2 and f_thems3 :
+                nb_facettes=3
+                tool_doc2vec.messages_presse_classification(os.path.splitext(project_params.workspace_path(request)+'data/'+f_dir_messages.name)[0],
                                                              project_params.workspace_path(request)+'data/nuage_de_mots',
                                                              project_params.workspace_path(request)+'data/'+f_thems1.name,
                                                              project_params.workspace_path(request)+'data/'+f_thems2.name,
                                                              project_params.workspace_path(request)+'data/'+f_thems3.name,
-                                                             int(vector_size),int(cont_min),int(val_epochs),project_params.workspace_path(request)+'workspace/doc2vec/resultat.csv')
+                                                             int(vector_size),int(cont_min),int(val_epochs),chemin)
+                thematiques=tool_doc2vec.liste_thems_for_li(project_params.workspace_path(request)+'data/'+f_thems1.name,'1:')+tool_doc2vec.liste_thems_for_li(project_params.workspace_path(request)+'data/'+f_thems2.name,'2:')+tool_doc2vec.liste_thems_for_li(project_params.workspace_path(request)+'data/'+f_thems3.name,'3:')
 
+                
+            elif f_thems2 :
+                nb_facettes=2
+                tool_doc2vec.messages_presse_classification(os.path.splitext(project_params.workspace_path(request)+'data/'+f_dir_messages.name)[0],
+                                                             project_params.workspace_path(request)+'data/nuage_de_mots',
+                                                             project_params.workspace_path(request)+'data/'+f_thems1.name,
+                                                             project_params.workspace_path(request)+'data/'+f_thems2.name,
+                                                             project_params.workspace_path(request)+'data/'+f_thems2.name,
+                                                             int(vector_size),int(cont_min),int(val_epochs),chemin)
+                
+                thematiques=tool_doc2vec.liste_thems_for_li(project_params.workspace_path(request)+'data/'+f_thems1.name,'1:')+tool_doc2vec.liste_thems_for_li(project_params.workspace_path(request)+'data/'+f_thems2.name,'2:')
+                
+                
+            else :
+                tool_doc2vec.messages_presse_classification(os.path.splitext(project_params.workspace_path(request)+'data/'+f_dir_messages.name)[0],
+                                                             project_params.workspace_path(request)+'data/nuage_de_mots',
+                                                             project_params.workspace_path(request)+'data/'+f_thems1.name,
+                                                             project_params.workspace_path(request)+'data/'+f_thems1.name,
+                                                             project_params.workspace_path(request)+'data/'+f_thems1.name,
+                                                             int(vector_size),int(cont_min),int(val_epochs),chemin)
+                thematiques=tool_doc2vec.liste_thems_for_li(project_params.workspace_path(request)+'data/'+f_thems1.name,'1:')  
+                
+                
             
-            resultat=tool_doc2vec.csv_no_header_to_html_table(project_params.workspace_path(request)+'workspace/doc2vec/resultat.csv')
+            resultat=tool_doc2vec.csv_no_header_to_html_table(chemin,nb_facettes)
             
             tool_doc2vec.create_files_from_source(tool_doc2vec.text,tool_doc2vec.folder,project_params.workspace_path(request)+'workspace/doc2vec/')
             
-    return render(request,'pel_mel/doc2vec.html',{'resultat': mark_safe(resultat)})
+           
+            
+    return render(request,'pel_mel/doc2vec.html',{'resultat': mark_safe(resultat),'thematiques': thematiques})
 
 
 def validationTermes(request):

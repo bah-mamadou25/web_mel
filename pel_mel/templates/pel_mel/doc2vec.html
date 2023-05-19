@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" defer></script>
     <title>pel_mel</title>
     <style>
-      #tabledoc2vecform td {
+      #tabledoc2vecform td,.accordion-body td {
         text-align: left;  
         
     }
@@ -89,28 +89,52 @@
                           </tr>
                           <tr>
                             <td>
-                              <label for="thematique1">Sélectionner la liste des thématiques de niveau 1 :</label>
+                              <label for="thematique1">Sélectionner un ensemble de facettes (.csv) :</label>
                             </td>
                             <td>
                               <input type="file" class="form-control-file" id="thematique1" name="thematique1" accept=".csv" required>
                             </td>
                           </tr>
-                          <tr>
-                            <td>
-                              <label for="thematique2">Sélectionner la liste des thématiques de niveau 2 :</label>
-                            </td>
-                            <td>
-                              <input type="file" class="form-control-file" id="thematique2" name="thematique2" accept=".csv" required>
+
+                          <tr >
+                            <td colspan="2">
+                              <div class="accordion accordion-flush" id="accordionFlushExample" >
+                                <div class="accordion-item">
+                                  <h2 class="accordion-header">
+                                    <button style="background-color: beige;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                      Ajouter une ou deux autre.s facette.s
+                                    </button>
+                                  </h2>
+                                  <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                      <table class="table">
+                                        <tr>
+                                          <td>
+                                            <label for="thematique2">Sélectionner un second ensemble de facettes (.csv) :</label>
+                                          </td>
+                                          <td>
+                                            <input type="file" class="form-control-file" id="thematique2" name="thematique2" accept=".csv" >
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            <label for="thematique3">Sélectionner un troisième ensemble de facettes  (.csv):</label>
+                                          </td>
+                                          <td>
+                                            <input type="file" class="form-control-file" id="thematique3" name="thematique3" accept=".csv" >
+                                          </td>
+                                        </tr>
+                                      </table>
+        
+                                    </div>
+                                  </div>
+                                </div>
+        
+                              </div>
                             </td>
                           </tr>
-                          <tr>
-                            <td>
-                              <label for="thematique3">Sélectionner la liste des thématiques de niveau 3 :</label>
-                            </td>
-                            <td>
-                              <input type="file" class="form-control-file" id="thematique3" name="thematique3" accept=".csv" required>
-                            </td>
-                          </tr>
+
+
                           <tr>
                             <td>
                               <label for="dimVec">Dimensionnalité des vecteurs d'apprentissage Doc2vec :</label>
@@ -136,8 +160,14 @@
                             </td>
                           </tr>
                         </tbody>
-                      </table>
+                      </table >
+
+
                     </div>
+
+                  
+
+                   
                     
                <br>
                 <input type="submit" class="btn btn-outline-primary" value="Lancer la classification">
@@ -150,26 +180,43 @@
 
 
             </div>
+            <div id="spinner-container" >
+              <div id="spinner" class="spinner-border" role="status" style=" width: 200px;">
+                  <span class="sr-only"></span>
+              </div>
+              <div id="loadMsg">Affichage...</div>
+          </div>
+          <div style="display: none;">
+            
+            <ul id="liste-thematiques">
+
+              {% for them in thematiques %}
+
+              <li >{{ them}}</li>
+          {% endfor %}
+              
+            </ul>
+          </div>
             <table class="table" style="width: 70vw;margin: auto; text-align: center;">
-              <thead>
+              <thead id="thead-resultat">
                 <tr>
-                  <th scope="col" style="width:150px">ID Message</th>
-                  <th scope="col">
+                  <th scope="col" style="width:150px" >ID Message</th>
+                  <th scope="col"  >
                     <div class="dropdown">
                       <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        Thématique NV1
+                        Facettes 1
                       </a>
                     
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="ulLevel1">
                         <li class="dropdown-item" >Tous</li>
                       </ul>
                     </div>
-                    <span id="appliedNV1">[Tous]</span>
+                    <span id="appliedNV1" >[Tous]</span>
                   </th>
-                  <th scope="col">
+                  <th scope="col"  >
                     <div class="dropdown">
                       <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        Thématique NV2
+                        Facettes 2
                       </a>
                     
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="ulLevel2" >
@@ -178,10 +225,10 @@
                     </div>
                     <span id="appliedNV2">[Tous]</span>
                   </th>
-                  <th scope="col">
+                  <th scope="col" >
                     <div class="dropdown">
                       <a class="btn btn-secondary dropdown-toggle"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        Thématique NV3
+                        Facettes 3
                       </a>
                     
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="ulLevel3">

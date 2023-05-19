@@ -1,3 +1,9 @@
+$('.modal input[type=submit]').click(()=>{
+  $('modal').hide();
+})
+
+
+
 /**
  * Récupère la valeur d'un cookie spécifique en fonction de son nom.
  * @param {string} name - Le nom du cookie à récupérer.
@@ -21,10 +27,7 @@ function getCookie(name) {
   }
   
 
-  $(document).ready(function() {
-    $('.toast').toast('show');
-    console.log('toast')
-  });
+
 
 
   function parseCSV(csvContent) {
@@ -96,5 +99,55 @@ function getCookie(name) {
     };
   
     processChunk(0); // Démarrer le traitement du premier lot
+  }
+  
+
+
+  function isEmptyColumn(selector, tdIndex) {
+    var tbody = document.querySelector(selector);
+    var rows = tbody.getElementsByTagName('tr');
+  
+    for (var i = 0; i < rows.length; i++) {
+      var cells = rows[i].getElementsByTagName('td');
+      var td = cells[tdIndex];
+  
+      if (td.textContent.trim() !== '') {
+        return false; 
+      }
+    }
+  
+    return true; 
+  }
+  
+
+
+
+  function hideTdsByIndex(tbodySelector, tdIndex) {
+    var tbody = document.querySelector(tbodySelector);
+    var rows = tbody.getElementsByTagName('tr');
+  
+    for (var i = 0; i < rows.length; i++) {
+      var cells = rows[i].getElementsByTagName('td');
+      var td = cells[tdIndex];
+  
+      td.style.display = 'none';
+    }
+  }
+
+
+
+  function getMatchingLiInnerText(ulSelector, searchString) {
+    var ul = document.querySelector(ulSelector);
+    var liList = ul.getElementsByTagName('li');
+    var result = [];
+  
+    for (var i = 0; i < liList.length; i++) {
+      var li = liList[i];
+      if (li.innerText.startsWith(searchString)) {
+        result.push(li.innerText);
+      }
+    }
+  
+    return result;
   }
   
