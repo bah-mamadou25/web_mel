@@ -4,7 +4,7 @@ __pycache__/
 word2vec_models/
 env/
 
-**/*.csv
+
 **/*/*.csv
 **/*/*/.csv
 **/*/*/*/.csv
