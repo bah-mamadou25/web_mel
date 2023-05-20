@@ -2,19 +2,19 @@
 
 
 function filterJsonByScore(jsonData, minScore, maxScore) {
-  // Convertir la chaîne JSON en objet JavaScript
+
   const data = JSON.parse(jsonData);
 
-  // Filtrer les éléments en fonction du score
+
   const filteredData = Object.entries(data).filter(([key, value]) => {
     const score = parseFloat(value[0].split(';')[1]);
     return score >= minScore && score <= maxScore;
   });
 
-  // Convertir les éléments filtrés en objet JavaScript
+
   const filteredJson = Object.fromEntries(filteredData);
 
-  // Retourner les éléments filtrés en format JSON
+
   return JSON.stringify(filteredJson);
 }
 
@@ -170,7 +170,6 @@ R.forEach((e)=>{
 function ajoutActions(idTable,contentTd1,contentTd2){
     var tableBody = document.getElementById(idTable).getElementsByTagName("tbody")[0];
 
-// boucle à travers chaque ligne
 for (var i = 0; i < tableBody.rows.length; i++) {
   // créer deux nouvelles cellules
   var newCell1 = document.createElement("td");
@@ -195,12 +194,12 @@ for (var i = 0; i < tableBody.rows.length; i++) {
  * @returns {HTMLElement} - L'élément <tr> créé.
  */
 function ajoutActionToRestaureTerme(terme, contentTd1, contentTd2) {
-  // Création de l'élément <tr>
+
   var tr = document.createElement('tr');
 
-  // Boucle sur les données du terme pour créer les <td>
+
   terme.forEach(function (data) {
-    // Création d'un <td> pour chaque donnée du terme
+
     var td = document.createElement('td');
     td.textContent = data;
     tr.appendChild(td); // Ajout du <td> au <tr>
@@ -209,7 +208,7 @@ function ajoutActionToRestaureTerme(terme, contentTd1, contentTd2) {
   // Création du premier <td> supplémentaire
   var td1 = document.createElement('td');
   td1.innerHTML = contentTd1;
-  tr.appendChild(td1); // Ajout du premier <td> supplémentaire au <tr>
+  tr.appendChild(td1); 
   tr.querySelector('td:last-child svg').style.cursor="pointer";
   tr.querySelector('td:last-child svg').addEventListener('click',supEvent)
 
@@ -221,7 +220,7 @@ function ajoutActionToRestaureTerme(terme, contentTd1, contentTd2) {
   // Création du deuxième <td> supplémentaire
   var td2 = document.createElement('td');
   td2.innerHTML = contentTd2;
-  tr.appendChild(td2); // Ajout du deuxième <td> supplémentaire au <tr>
+  tr.appendChild(td2); 
   tr.querySelector('td:last-child svg').style.cursor="pointer";
   tr.querySelector('td:last-child svg').addEventListener('click',validEvent)
   return tr;
@@ -264,7 +263,7 @@ function getFirstTDsContent(tr, i) {
     const tds = tr.querySelectorAll('td');
     const content = [];
   
-    // boucle sur les `i` premiers éléments `td`
+ 
     for (let j = 0; j < i && j < tds.length; j++) {
       content.push(tds[j].textContent);
     }

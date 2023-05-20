@@ -32,13 +32,10 @@ $(document).ready(function() {
 */
 
 $('#my-trainForm').on('submit', function (event) {
-    // Empêche la soumission normale du formulaire
     event.preventDefault();
-    // Affiche le spinner
     if (confirm('Cette étape peut prendre plusieurs minutes. Êtes-vous sûr de vouloir continuer ?')) {
         $('#spinner-container').show();
 
-        // Envoie la requête Ajax pour traiter le formulaire
         fetch($(this).attr('action'), {
             method: $(this).attr('method'),
             body: new FormData(this),
@@ -53,24 +50,19 @@ $('#my-trainForm').on('submit', function (event) {
                 return response.json();
             })
             .then(data => {
-                // Cache le spinner
                 $('.spinner-border').hide();
                 $('#spinner-container').hide();
-                // Affiche les tables HTML renvoyées
                 
                 if($('#termes').length){
                     $('#termes').html(data.termes)
                 }
             })
             .catch(error => {
-                // Cache le spinner
                 $('.spinner-border').hide();
                 $('#spinner-container').hide();
-                // Affiche un message d'erreur
                 alert(error.message);
             });
         } else {
-            // L'utilisateur a annulé la soumission du formulaire
             alert('La soumission du formulaire a été annulée.');
           }
     });
@@ -79,13 +71,10 @@ $('#my-trainForm').on('submit', function (event) {
 
     $('#useTermesForm').on('submit', function (event) {
         console.log("test")
-        // Empêche la soumission normale du formulaire
         event.preventDefault();
-        // Affiche le spinner
         if (confirm('Cette étape peut prendre plusieurs minutes. Êtes-vous sûr de vouloir continuer ?')) {
             $('#spinner-container').show();
     
-            // Envoie la requête Ajax pour traiter le formulaire
             fetch($(this).attr('action'), {
                 method: $(this).attr('method'),
                 body: new FormData(this),
@@ -100,10 +89,8 @@ $('#my-trainForm').on('submit', function (event) {
                     return response.json();
                 })
                 .then(data => {
-                    // Cache le spinner
                     $('.spinner-border').hide();
                     $('#spinner-container').hide();
-                    // Affiche les tables HTML renvoyées
                     
 
                     $('#termesSimilaires').html(data.termesSimilaires);
@@ -126,14 +113,11 @@ $('#my-trainForm').on('submit', function (event) {
                     });
                 })
                 .catch(error => {
-                    // Cache le spinner
                     $('.spinner-border').hide();
                     $('#spinner-container').hide();
-                    // Affiche un message d'erreur
                     alert(error.message);
                 });
             } else {
-                // L'utilisateur a annulé la soumission du formulaire
                 alert('La soumission du formulaire a été annulée.');
               }
         });
@@ -141,13 +125,10 @@ $('#my-trainForm').on('submit', function (event) {
 
         $('#useThematiquesForm').on('submit', function (event) {
             console.log("test")
-            // Empêche la soumission normale du formulaire
             event.preventDefault();
-            // Affiche le spinner
             if (confirm('Cette étape peut prendre plusieurs minutes. Êtes-vous sûr de vouloir continuer ?')) {
                 $('#spinner-container').show();
         
-                // Envoie la requête Ajax pour traiter le formulaire
                 fetch($(this).attr('action'), {
                     method: $(this).attr('method'),
                     body: new FormData(this),
@@ -162,10 +143,8 @@ $('#my-trainForm').on('submit', function (event) {
                         return response.json();
                     })
                     .then(data => {
-                        // Cache le spinner
                         $('.spinner-border').hide();
                         $('#spinner-container').hide();
-                        // Affiche les tables HTML renvoyées
                         
     
                         $('#thematiques').html(data.thematiques);
@@ -198,7 +177,6 @@ $('#my-trainForm').on('submit', function (event) {
                         alert(error.message);
                     });
                 } else {
-                    // L'utilisateur a annulé la soumission du formulaire
                     alert('La soumission du formulaire a été annulée.');
                   }
             });
@@ -217,22 +195,19 @@ function exportToCSV(selector,fileName) {
     // Créer un tableau pour stocker les données CSV
     var csvData = [];
   
-    // Parcourir chaque ligne du tbody
+
     for (var i = 0; i < rows.length; i++) {
       var rowData = [];
       var columns = rows[i].querySelectorAll("td");
-  
-      // Parcourir chaque colonne de la ligne, en ignorant le premier td
+
       for (var j = 1; j < columns.length; j++) {
         var columnData = columns[j].textContent.trim();
         rowData.push(columnData);
       }
-  
-      // Ajouter la ligne au tableau de données CSV
+
       csvData.push(rowData);
     }
   
-    // Convertir le tableau de données CSV en format CSV
     var csvContent = csvData.map(row => row.join(";")).join("\n");
   
     // Télécharger le fichier CSV
@@ -268,14 +243,14 @@ function exportToCSV(selector,fileName) {
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
-        // Traiter les données JSON
+       
         console.log(data)
         const csvContent = convertToCSV(data);
         console.log(csvContent)
          downloadCSV(csvContent, 'termes_similaires.csv');
       })
       .catch(error => {
-        // Gérer les erreurs de la requête
+        
         console.error('Erreur :', error);
       });
   });
@@ -283,17 +258,14 @@ function exportToCSV(selector,fileName) {
 
   function convertToCSV(jsonData) {
     const delimiter = ';'; // Délimiteur CSV
-    
-    const headers = Object.keys(jsonData[0]);
+  
     const rows = jsonData.map(obj => Object.values(obj)[0].join(delimiter));
-    
-    const csvContent = [
-      headers.join(delimiter),
-      ...rows
-    ].join('\n');
-    
+  
+    const csvContent = rows.join('\n');
+  
     return csvContent;
   }
+  
 
   function downloadCSV(csvContent, fileName) {
     const blob = new Blob([csvContent], { type: 'text/csv' });

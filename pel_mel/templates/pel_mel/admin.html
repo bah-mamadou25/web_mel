@@ -1,10 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Page d'administration</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="{% static 'js/word2vec.js' %}" defer></script>
+
 </head>
-<body>
+<body style="width: 100vw; height:100vh">
+
+    <div style="position:relative;top:50vh; margin-right:10px; float: right; cursor:pointer;color:blue;text-decoration-line: underline;" id="stats"  >
+        <em>Obtenir les statistiques </em> 
+    </div>
     <div id="message" class="{% if 'succès' in message %}bg-success{% else %}bg-danger{% endif %}" style="width: 100vw;height: auto; text-align: center;">{{ message }}</div>
     
     <div class="container">
@@ -56,23 +63,55 @@
         
 
     
-    <script>
-        // Vérification de la correspondance des mots de passe
-        const password = document.getElementById('password');
-        const confirm_password = document.getElementById('confirm_password');
 
-        function validatePassword() {
-            if (password.value !== confirm_password.value) {
-                confirm_password.setCustomValidity("Les mots de passe ne correspondent pas");
-            } else {
-                confirm_password.setCustomValidity('');
-            }
-        }
-
-        password.addEventListener('change', validatePassword);
-        confirm_password.addEventListener('keyup', validatePassword);
-        
-
-    </script>
 </body>
+
+<script>
+    // Vérification de la correspondance des mots de passe
+    const password = document.getElementById('password');
+    const confirm_password = document.getElementById('confirm_password');
+
+    function validatePassword() {
+        if (password.value !== confirm_password.value) {
+            confirm_password.setCustomValidity("Les mots de passe ne correspondent pas");
+        } else {
+            confirm_password.setCustomValidity('');
+        }
+    }
+
+    password.addEventListener('change', validatePassword);
+    confirm_password.addEventListener('keyup', validatePassword);
+    
+    document.querySelector('#stats').addEventListener('click',()=>{
+        downloadStats()
+    })
+
+    function downloadStats(){
+
+            
+            var res=confirm("Un fichier csv sera téléchargé contenant les statistiques")
+
+            if(!res) return;
+            const baseUrl = window.location.origin;
+            const apiEndpoint = "stats/";
+            
+            const apiUrl = new URL(apiEndpoint, baseUrl).href;
+            console.log(apiUrl);
+            
+            fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+            
+                console.log(data)
+                const csvContent = convertToCSV(data);
+                console.log(csvContent)
+                downloadCSV(csvContent, 'classificationStats.csv');
+            })
+            .catch(error => {
+                
+                console.error('Erreur :', error);
+      });
+
+    }
+</script>
 </html>

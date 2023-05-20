@@ -4,20 +4,19 @@
  * @returns {string} - Le contenu converti au format CSV.
  */
 function convertTbodyToCSV(tbodyElement) {
-    // Récupérer toutes les lignes du tbody
+  
     const rows = tbodyElement.querySelectorAll('tr');
     
     // Créer un tableau pour stocker les données CSV
     const csvData = [];
     
-    // Parcourir chaque ligne
     rows.forEach((row) => {
       const rowData = [];
       
-      // Récupérer toutes les colonnes (td) de la ligne
+    
       const columns = row.querySelectorAll('td');
       
-      // Parcourir chaque colonne
+     
       for (let i of columns) {
         if(!i.querySelector("svg")&& i!==columns[0])
         {
@@ -27,12 +26,10 @@ function convertTbodyToCSV(tbodyElement) {
         }
         
       }
-      
-      // Ajouter la ligne au tableau de données CSV
+ 
       csvData.push(rowData);
     });
     
-    // Convertir le tableau de données CSV en format CSV
     const csvString = csvData.map(row => row.join(';')).join('\n');
     
     return csvString;
@@ -85,17 +82,16 @@ function convertTbodyToCSV(tbodyElement) {
   function ajoutActions(idTable,contentTd1,contentTd2){
     var tableBody = document.getElementById(idTable).getElementsByTagName("tbody")[0];
 
-// boucle à travers chaque ligne
-for (var i = 0; i < tableBody.rows.length; i++) {
-  // créer deux nouvelles cellules
-  var newCell1 = document.createElement("td");
-  newCell1.innerHTML = contentTd1
-  tableBody.rows[i].appendChild(newCell1);
-  if (contentTd2!=""){
-    var newCell2 = document.createElement("td");
-    newCell2.innerHTML = contentTd2
-    tableBody.rows[i].appendChild(newCell2);
-  }
+    for (var i = 0; i < tableBody.rows.length; i++) {
+      
+      var newCell1 = document.createElement("td");
+      newCell1.innerHTML = contentTd1
+      tableBody.rows[i].appendChild(newCell1);
+      if (contentTd2!=""){
+        var newCell2 = document.createElement("td");
+        newCell2.innerHTML = contentTd2
+        tableBody.rows[i].appendChild(newCell2);
+      }
    
   
 }
@@ -115,10 +111,10 @@ for (var i = 0; i < tableBody.rows.length; i++) {
 
 
 function ajoutActionToRestaureTerme(terme, contentTd1, contentTd2) {
-  // Création de l'élément <tr>
+
   var tr = document.createElement('tr');
 
-  // Boucle sur les données du terme pour créer les <td>
+
   terme.forEach(function (data) {
     // Création d'un <td> pour chaque donnée du terme
     var td = document.createElement('td');
@@ -141,7 +137,7 @@ function ajoutActionToRestaureTerme(terme, contentTd1, contentTd2) {
   // Création du deuxième <td> supplémentaire
   var td2 = document.createElement('td');
   td2.innerHTML = contentTd2;
-  tr.appendChild(td2); // Ajout du deuxième <td> supplémentaire au <tr>
+  tr.appendChild(td2); 
   tr.querySelector('td:last-child svg').style.cursor="pointer";
   tr.querySelector('td:last-child svg').addEventListener('click',validEvent)
   return tr;
@@ -158,14 +154,12 @@ function ajoutActionToRestaureTerme(terme, contentTd1, contentTd2) {
 function createTableRowWithHTMLString(values, htmlString) {
   const tr = document.createElement('tr');
 
-  // boucle sur les valeurs et crée des éléments td pour chacune
   for (const value of values) {
     const td = document.createElement('td');
     td.textContent = value;
     tr.appendChild(td);
   }
 
-  // crée un dernier élément td avec la chaîne de caractères en tant qu'innerHTML
   const lastTD = document.createElement('td');
   lastTD.innerHTML = htmlString;
   tr.appendChild(lastTD);
@@ -177,7 +171,7 @@ function getFirstTDsContent(tr, i) {
   const tds = tr.querySelectorAll('td');
   const content = [];
 
-  // boucle sur les `i` premiers éléments `td`
+
   for (let j = 0; j < i && j < tds.length; j++) {
     content.push(tds[j].textContent);
   }

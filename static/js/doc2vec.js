@@ -11,13 +11,12 @@ function checkRowCount() {
     const input1 = document.getElementById('thematique2');
     const input2 = document.getElementById('thematique3');
   
-    input2.disabled = true; // Désactiver le deuxième champ au chargement de la page
-  
+    input2.disabled = true;
     input1.addEventListener('change', () => {
       if (input1.files.length > 0) {
-        input2.disabled = false; // Activer le deuxième champ si le premier champ est choisi
+        input2.disabled = false; 
       } else {
-        input2.disabled = true; // Désactiver le deuxième champ si le premier champ est vide
+        input2.disabled = true; 
       }
     });
   
@@ -27,7 +26,7 @@ function checkRowCount() {
   var timer = setInterval(function() {
     console.log("boucle")
     if (checkRowCount()) {
-      // Arrêter le timer
+  
       clearInterval(timer);
    
 
@@ -61,10 +60,12 @@ function checkRowCount() {
       $('.spinner-border').hide();
       $('#spinner-container').hide();
 
+      document.querySelector('#telecharger').removeAttribute('disabled')
+
 
       
     } 
-  }, 2000); // Vérifier toutes les 2 secondes
+  }, 2000); 
 
 
 function editFacette(){

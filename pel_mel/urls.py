@@ -25,6 +25,11 @@ urlpatterns = [
     path("validationTermes/",views.validationTermes, name="validationTermes"), 
     path("validationIntervalleTermesAPI/",views.validationIntervalleTermesAPI, name="validationIntervalleTermesAPI"), 
     path("voirdoc",views.voirdoc, name="voirdoc"),
+    path("logFile/",views.logFile,name="logFile/"),
+    path("stats/",views.stats,name="stats/"),
+    
+    
+    
     
     
     

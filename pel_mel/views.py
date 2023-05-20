@@ -3,9 +3,9 @@ from django.shortcuts import render,redirect
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.hashers import make_password
 from django.utils.safestring import mark_safe
-from django.http import JsonResponse
-from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns,tool_word2vec,project_params,tool_doc2vec
-import time,os,csv
+from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponse
+from .tools import tool_load_file,tool_ENs,tool_termes,tool_relationsPatterns,tool_word2vec,project_params,tool_doc2vec,tool_logFile
+import time,os,csv,json
 from django.contrib.auth.hashers import check_password
 from .models import User
 from django.db import IntegrityError
@@ -364,6 +364,13 @@ def validationTermes(request):
     termesA=tool_ENs.csv_to_html_table( project_params.workspace_path(request)+'workspace/termes/termes.csv')
     return render(request,'pel_mel/validationTermes.html',{'termesA' : mark_safe(termesA)})
 
+
+
+    
+    
+    
+    
+    
 ############################### API RESPONSE 
 
 def enAPI(request):
@@ -559,5 +566,40 @@ def rechercheSimilariteAPI(request):
     except FileNotFoundError:
         response_data = {
             'error': f'Lancer l\'apprentissage pour obtenir une liste de termes à annalyser.'
+        }
+        return JsonResponse(response_data, status=404)
+    
+    
+def logFile(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)  
+            contenu = data.get('contenu')  
+            print('*************')
+            print(contenu)
+            print('*************')
+            
+            tool_logFile.addToLogfile(contenu,project_params.workspace_path(request)+'workspace/doc2vec/resultat.csv')
+           
+
+            
+            response_data = {'message': 'Contenu du fichier traité avec succès'}
+            return JsonResponse(response_data)
+        except json.JSONDecodeError as e:
+         
+            error_message = 'Erreur lors de l\'analyse des données JSON: {}'.format(str(e))
+            return JsonResponse({'error': error_message}, status=400)
+    else:
+        # Gérer les autres méthodes HTTP (GET, PUT, etc.)
+        return HttpResponseNotAllowed(['POST'])
+    
+def stats(request):
+    try:
+        json_data=tool_termes.csv_to_json('classificationStats.csv')
+
+        return JsonResponse(json_data, safe=False, json_dumps_params={'ensure_ascii': False})
+    except FileNotFoundError:
+        response_data = {
+            'error': f'erreur de chargment du fichier stats'
         }
         return JsonResponse(response_data, status=404)
