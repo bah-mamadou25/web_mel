@@ -236,10 +236,53 @@
       <ul>
           <li>Pour commencer : 
               <ol>
+              Pré-traitement word2vec :
+                    <ol>
+                    
+                    <li>Sélectionner le corpus (nettoyé ou non).</li>
+                   
+                    <li>  Sélectionner la destination où vous voulez sauvegarder le corpus pré-traité</li>
+                      <li>Cocher les options de nettoyage que vous voulez :</li>
+                      <li>Cliquer sur le bouton « Lancer le pré-traitement »</li>
+                      <li>Le corpus traité sera télécharger automatiquement</li>
+                    </ol>
+                
 
-                .......................
               </ol>
           </li>
+
+          <ul>
+            Entraîner un modèle :
+            <ol>
+              <li>Saisir la dimensionnalité des vecteurs de mots qui seront utilisé par word2vec</li>
+              <li>Saisir la taille de la fenêtre qui sera utilisé par word2vec pour l'apprentissage</li>
+              <li>Cliquer sur Lancer l'apprentissage</li>
+              <li>Attendre la fin de l'apprentissage, la liste des termes trouvés par word2vec seront affiché dans la table d'affichage</li>
+              <li>Exporter la liste des termes si vous voulez la sauvegarder en local en cliquant sur le bouton « Exporter la liste des termes »</li>
+              <li>Lancer la recherche des termes similaires en cliquant sur le bouton « Lancer la recherche des termes similaires »</li>
+              <li>Le fichier contenant les termes similaires sera automatique télécharger(Vous en aurez besoin dans <strong style="color: blue;">DOC2VEC</strong>)</li>
+            </ol>
+          </ul>
+
+          <ul>
+            Utiliser un modèle pré-entraîné :
+            <ol>
+            <li>Nous utiliserons un modèle entraîné qui se trouve déjà au niveau de notre serveur <code>https://fauconnier.github.io/ </code> </li>
+            <li>Sélectionner la liste des termes (extraits au préalable)</li>
+            <li> Cliquer sur le bouton « Lancer la recherche des relations (similarités) »</li>
+            <li>À la fin de la recherche, les relations trouvées seront affichées dans la table d'affichage</li>
+            <li>  Vous pouvez editer les termes similaires en cliquant sur la colonne correspondante avant de le télécharger via le bouton <strong> Télécharger</strong></li>
+          </ol>
+          </ul>
+          <ul>
+            Utiliser un modèle pré-entraîné :
+            <ol>
+            <li> Sélectionner la liste des thématiques</li>
+            <li>Saisir la profondeur de la recherche (profondeur 1 pour trouver que les termes similaires à la thématique, profondeur 2 pour déscendre d'un autre niveau dans la l'arbre de recherche, etc.</li>
+            <li>Cliquer sur Lancer la recherche.</li>
+            <li>Attendre la fin de la recherche, les nuages de mots trouvés par word2vec seront affiché dans la table d'affichage.</li>
+          </ol>
+            </ul>
           
       </ul>
 

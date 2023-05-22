@@ -1,5 +1,5 @@
 $('.modal input[type=submit]').click(()=>{
-  $('modal').hide();
+  $('.modal').modal('hide');
 })
 
 

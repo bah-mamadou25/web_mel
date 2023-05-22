@@ -8,17 +8,56 @@ function checkRowCount() {
   }
 
 
-    const input1 = document.getElementById('thematique2');
-    const input2 = document.getElementById('thematique3');
+  function getSelectedRadioId() {
+
+    var radiosDiv = document.getElementById('radios-choice');
   
-    input2.disabled = true;
-    input1.addEventListener('change', () => {
-      if (input1.files.length > 0) {
-        input2.disabled = false; 
-      } else {
-        input2.disabled = true; 
+  
+    var radioInputs = radiosDiv.querySelectorAll('input[type="radio"][name="facette"]');
+  
+   
+    for (var i = 0; i < radioInputs.length; i++) {
+      if (radioInputs[i].checked) {
+       
+        return radioInputs[i].id;
       }
-    });
+    }
+
+    return null;
+  }
+
+function modifTd(td){
+  resultat=getSelectedRadioId()
+  if(resultat){
+      td.innerText=resultat
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const input1 = document.getElementById('thematique2');
+  const input2 = document.getElementById('thematique3');
+
+  input2.disabled = true;
+  input1.addEventListener('change', () => {
+    if (input1.files.length > 0) {
+      input2.disabled = false; 
+    } else {
+      input2.disabled = true; 
+    }
+  });
   
   
   
@@ -84,19 +123,35 @@ function editFacette(){
           cell.addEventListener("click", function() {
             var text = this.textContent;
             var position=this.cellIndex
+
+            
             var rightFacette=getMatchingLiInnerText('#liste-thematiques',position+':')
             console.log(rightFacette)
-            
-            // Afficher une boîte de dialogue pour modifier le texte
-            var newText = prompt("Modifier le texte :", text);
-           
-            if ((newText !== null)) {
-              if((rightFacette.includes(position+':'+newText.trim()))){
-                  this.textContent = newText;
+
+            radiosLi=''
+
+            for(e of rightFacette){
+              radiosLi+='<div>'
+              e=e.split(':')[1];
+              if(e==text){
+                radiosLi+='<input type="radio" name="facette" id="'+e+'" checked /> '+e+'<br>'
               }else{
-                alert('cette valeur n\'a pas été ajouté car elle ne fait pas parie de la liste fournie \n voir la liste du dropdown de la facette correspondante')
+                radiosLi+='<input type="radio" name="facette" id="'+e+'"  />'+e+'<br>'
+
               }
+              radiosLi+='</div>'
             }
+
+            document.querySelector('#closebtn').addEventListener('click',(e)=>{
+              divModal.parentNode.style.display="none"
+              modifTd(this)
+            })
+
+            divModal=document.querySelector("#radios-choice ")
+            divModal.parentNode.style.display="block"
+            divModal.innerHTML=radiosLi;
+            console.log(radiosLi)
+
           });
         }
       }
@@ -294,3 +349,5 @@ function onClicNonValides() {
     document.querySelector('#appliedV').innerHTML='[Non validé.s]'
 
 }
+
+

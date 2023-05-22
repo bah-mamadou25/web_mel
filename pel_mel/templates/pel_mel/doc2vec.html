@@ -45,10 +45,10 @@
                    <form action="" method="post" enctype="multipart/form-data" style="display: inline-block;" >
                          {% csrf_token %}
                          <label for="corpus">Sélectionner le corpus nettoyé initial (.txt) : </label>
-                         <input type="file" class="form-control-file" id="corpus" name="corpus" accept=".txt"> 
+                         <input type="file" class="form-control-file" id="corpus" name="corpus" accept=".txt" required> 
                          <br>
-                         <label for="thematiques">Sélectionner les thématiques (.csv) : </label>
-                        <input type="file" class="form-control-file" id="thematiques" name="thematiques" accept=".csv"> 
+                         <label for="thematiques">Sélectionner les thématiques similaires (.csv) : </label>
+                        <input type="file" class="form-control-file" id="thematiques" name="thematiques" accept=".csv" required> 
                         <br>
 
                     </div>
@@ -291,9 +291,21 @@
         <h5 class="modal-title" id="aideModalLabel">Aide</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body" style="width: 60vw;">
+      <div class="modal-body" style="width: 60vw; text-align: left;">
       <ul>
-          
+          <li>Préparer les nuages de mots par thématiques
+            <ol>
+              <li>une fois la modal affihée (après avoir cliqué sur <strong>Préparer les nuages de mots par thématiques</strong></li>
+              <li>Joindre le fichier contenant le corpus nettoyé et segmenter en phrases</li>
+              <li>Après Soumission, un dossier zippé sera télécharger qui contiendra <strong>les nuages de mots</strong> à soumettre pour la partie classification</li>
+            </ol>
+
+          </li>
+         
+          <li>Choisir le dossier zippé contenant les repertoire à classifier</li>
+          <li>Joindre les nuages de mots générés (voir début texte)</li>
+          <li>Vous pouvez choisir au maximum trois ensembles de facettes</li>
+          <li>Possibilité de modifier les répertoires classés en cliquant sur la colonne que vous souhaitez modifiée</li>
       </ul>
 
  
@@ -306,6 +318,21 @@
 </div>
 </div>
 <br>
+<!-- choices -->
+  <!-- choices -->
+  <div style="width: 100vw; height: 100vh ; display: none;  background-color: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0;text-align:center ">
+    <div id="radios-choice" style="background-color: beige; width: 500px; margin:auto;  display: block;margin-top:100px; z-index:3; text-align:left;padding-left: 10px; width:500px; height:500px;overflow:auto">
+
+    </div>
+    <br>
+
+    <div style="margin-top:0; width:100vw">
+      <input id="closebtn" type="button" value="Fermer" class="btn-sm btn-outline-dark" style=" display:block;margin:auto;">
+    </div>
+  </div>
+
+
+
 </body>
 
 </html>
