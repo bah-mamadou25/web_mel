@@ -41,7 +41,7 @@ def administrateur(request):
             password = request.POST['password']
             confirm_password = request.POST['confirm_password']
             
-            # Vérification si les mots de passe correspondent
+          
             if password != confirm_password:
                 message = 'Les mots de passe ne correspondent pas.'
             else:
@@ -69,10 +69,18 @@ def administrateur(request):
                 project_params.delete_workspace('workspaces/'+username)
             except User.DoesNotExist:
                 message = 'L\'utilisateur n\'existe pas.'
+        elif 'old_password' in request.POST:
+            o_pwd=request.POST['old_password']
+            n_pwd=request.POST['new_password']
+            c_pwd=request.POST['confirm_password']
+            message=User.change_password(o_pwd,n_pwd,c_pwd)
+            return render(request, 'pel_mel/admin.html', {'message': message,'users':users})
+  
         else:
             message =''
         
         return render(request, 'pel_mel/admin.html', {'message': message,'users':users})
+        
     else:
         return render(request, 'pel_mel/errors/reachadmin.html',  {'message': message,'users':users})
         
